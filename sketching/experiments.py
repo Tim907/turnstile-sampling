@@ -385,8 +385,7 @@ class TurnstileSamplingExperiment(BaseExperiment):
                 Z_[f[i]] += g[i] * Z[i]
             R_ = np.linalg.qr(Z_, mode="r")
             for j in range(s):
-                B_j_list[j] = B_j_list[j] * R_
-                # error because R_ is d x d
+                B_j_list[j] = np.matmul(B_j_list[j], R_)
 
             reduced_matrix = np.zeros((n, d))
             for i in range(n):
