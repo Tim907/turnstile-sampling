@@ -331,7 +331,7 @@ class TurnstileSamplingExperiment(BaseExperiment):
 
         s = 5
         p = 1
-        k = size * 10
+        k = round(size * np.log(n) / 10)
         if s / 2 == s // 2:
             raise ValueError("S should be an odd number.")
 
@@ -369,10 +369,12 @@ class TurnstileSamplingExperiment(BaseExperiment):
             for j in range(s):
                 a_i_j[j, :] = sigma_i_j_mat[i, j] * B_j_list[j][h_i_j_mat[i, j]]
 
-            temp = np.linalg.norm(a_i_j, ord=p, axis=1) ** p # is of length s
-            index_of_median = np.argsort(temp)[len(temp) // 2]
-            v_i[i] = temp[index_of_median]
-            a_i_mat[i, :] = a_i_j[index_of_median, :]
+            v_i[i] = np.median(np.linalg.norm(a_i_j, ord=p, axis=1) ** p)
+            # Find j minimizing median
+            temp = np.zeros(s)
+            for j in range(s):
+                temp[j] = np.median(np.linalg.norm(a_i_j[j, :] - a_i_j, ord=p, axis=1) ** p) # median of s elements
+            a_i_mat[i, :] = a_i_j[np.argmin(temp), :]
 
         # Select a_i with k largest v_i
         index_of_largest = np.argsort(-v_i)[0:k]
@@ -395,9 +397,8 @@ class TurnstileSamplingExperiment(BaseExperiment):
         # Random map with uniform probability
         h = np.random.randint(0, R_2, n)
 
-        Phi = np.zeros((R_2, n))
-        Phi[h, np.arange(n)] = 1
-        Phi[h, np.arange(n)] = np.random.standard_cauchy(n)
+        Pi_2 = np.zeros((R_2, n))
+        Pi_2[h, np.arange(n)] = np.random.standard_cauchy(n)
 
         #row_indices = _rng.choice(n, size=size, replace=False)
         #reduced_matrix = Z[row_indices]
