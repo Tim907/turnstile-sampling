@@ -309,8 +309,8 @@ class TurnstileSamplingExperiment(BaseExperiment):
             optimizer: optimizer.base_optimizer,
             algorithm
     ):
-        if algorithm not in {1, 2, 3}:
-            raise ValueError("Algorithm must be one of {1, 2, 3}.")
+        if algorithm not in {2, 3}:
+            raise ValueError("Algorithm must be one of {2, 3}.")
         super().__init__(
             num_runs=num_runs,
             min_size=min_size,
@@ -339,72 +339,65 @@ class TurnstileSamplingExperiment(BaseExperiment):
         h_i_j_mat = np.random.randint(0, size, n*s).reshape((n, s))
         # mapping function to determine the sign {-1,1}
         sigma_i_j_mat = (np.random.randint(2, size=n*s) * 2 - 1).reshape((n, s))
-        if self.algorithm == 2:
-            t_i = np.random.uniform(size=n)
-        if self.algorithm == 3:
-            sigma_i_j_mat = (sigma_i_j_mat**2) * np.random.standard_cauchy(n * s).reshape((n, s))
+        t_i = np.random.uniform(size=n)
 
         # Initialize B as list of s 0-matrices
         B_j_list = []
         for j in range(s):
             B_j_list.append(np.zeros((size, d)))
 
-        if self.algorithm == 1:
-            # turnstile stream updates
-            for i in range(n):
-                for j in range(s):
-                    B_j_list[j][h_i_j_mat[i, j], :] = B_j_list[j][h_i_j_mat[i, j], :] + sigma_i_j_mat[i, j] * Z[i, :]
-
-            # faster vectorized turnstile stream updates
-            #for j in range(s):
-            #    np.add.at(B_j_list[j], h_i_j_mat[:, j], (Z * sigma_i_j_mat[:, j, np.newaxis]))
-            # IS EVEN SLOWER!
-
-            reduced_matrix = np.zeros((n, d))
-            weights = np.zeros(n)
-            for i in range(n):
-                a_i_j = np.zeros(s * d).reshape((s, d))
-                for j in range(s):
-                    a_i_j[j, :] = sigma_i_j_mat[i, j] * B_j_list[j][h_i_j_mat[i, j]]
-
-                temp = np.linalg.norm(a_i_j, ord=1, axis=1)
-                # is of length s
-                index_of_median = np.argsort(temp)[len(temp)//2]
-                reduced_matrix[i, :] = a_i_j[index_of_median, :]
-            # what weight?
-
-        if self.algorithm == 2:
-            for i in range(n):
-                for j in range(s):
-                    B_j_list[j][h_i_j_mat[i, j], :] = B_j_list[j][h_i_j_mat[i, j], :] + sigma_i_j_mat[i, j] * Z[i, :] / t_i[i]**(1/p)
-
-            f = np.random.randint(d ** 2, size=n)
-            g = np.random.randint(2, size=n) * 2 - 1
-            Z_ = np.zeros((d ** 2, d))
-            for i in range(n):
-                Z_[f[i]] += g[i] * Z[i]
-            R_ = np.linalg.qr(Z_, mode="r")
+        # turnstile stream updates
+        for i in range(n):
             for j in range(s):
-                B_j_list[j] = np.matmul(B_j_list[j], R_)
+                B_j_list[j][h_i_j_mat[i, j], :] = B_j_list[j][h_i_j_mat[i, j], :] + sigma_i_j_mat[i, j] * Z[i, :] / t_i[
+                    i] ** (1 / p)
 
-            reduced_matrix = np.zeros((n, d))
-            for i in range(n):
-                a_i_j = np.zeros(s * d).reshape((s, d))
-                for j in range(s):
-                    a_i_j[j, :] = sigma_i_j_mat[i, j] * B_j_list[j][h_i_j_mat[i, j]]
+        # Multiplication B_j = B_j * R
+        f = np.random.randint(d ** 2, size=n)
+        g = np.random.randint(2, size=n) * 2 - 1
+        Z_ = np.zeros((d ** 2, d))
+        for i in range(n):
+            Z_[f[i]] += g[i] * Z[i]
+        R_ = np.linalg.qr(Z_, mode="r")
+        for j in range(s):
+            B_j_list[j] = np.matmul(B_j_list[j], R_)
 
-                temp = np.linalg.norm(a_i_j, ord=1, axis=1)
-                # is of length s
-                index_of_median = np.argsort(temp)[len(temp) // 2]
-                reduced_matrix[i, :] = a_i_j[index_of_median, :]
+        a_i_mat = np.zeros((n, d))
+        v_i = np.zeros(n)
+        for i in range(n):
+            a_i_j = np.zeros(s * d).reshape((s, d))
+            for j in range(s):
+                a_i_j[j, :] = sigma_i_j_mat[i, j] * B_j_list[j][h_i_j_mat[i, j]]
 
-            norms = np.linalg.norm(reduced_matrix, ord=p, axis=1)
-            # is of length n
-            index_of_largest = np.argsort(norms)[0:k]
-            alpha = np.min(np.linalg.norm(reduced_matrix[index_of_largest, :], ord=1, axis=1))
-            reversed = reduced_matrix * t_i[:, np.newaxis]**(1/p)
-            weights = np.linalg.norm(reversed, ord=p, axis=1)
-            weights[weights < 1] = 1
+            temp = np.linalg.norm(a_i_j, ord=p, axis=1) ** p # is of length s
+            index_of_median = np.argsort(temp)[len(temp) // 2]
+            v_i[i] = temp[index_of_median]
+            a_i_mat[i, :] = a_i_j[index_of_median, :]
+
+        # Select a_i with k largest v_i
+        index_of_largest = np.argsort(-v_i)[0:k]
+        reduced_matrix = a_i_mat[index_of_largest, :]
+        t_i = t_i[index_of_largest]
+
+        # calculate alpha
+        norms = np.linalg.norm(reduced_matrix, ord=p, axis=1) # is of length n
+        alpha = np.min(np.linalg.norm(reduced_matrix[np.argsort(norms)[0:k], :], ord=p, axis=1) ** p)
+
+        reversed = reduced_matrix * t_i[:, np.newaxis] ** (1 / p)
+        weights = (np.linalg.norm(reversed, ord=p, axis=1) ** p) / alpha
+        weights[weights < 1] = 1
+
+        # Theorem 4.1 https://arxiv.org/pdf/1801.04414.pdf
+        reversed = reversed * d * np.log(d)
+        R_1 = reversed.shape[0]
+        R_2 = round(min(R_1, d ** 1.1))
+
+        # Random map with uniform probability
+        h = np.random.randint(0, R_2, n)
+
+        Phi = np.zeros((R_2, n))
+        Phi[h, np.arange(n)] = 1
+        Phi[h, np.arange(n)] = np.random.standard_cauchy(n)
 
         #row_indices = _rng.choice(n, size=size, replace=False)
         #reduced_matrix = Z[row_indices]
