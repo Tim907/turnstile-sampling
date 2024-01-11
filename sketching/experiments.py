@@ -349,8 +349,7 @@ class TurnstileSamplingExperiment(BaseExperiment):
         # turnstile stream updates for Algo 1 & 2
         for i in range(n):
             for j in range(s):
-                B_j_list[j][h_i_j_mat[i, j], :] = B_j_list[j][h_i_j_mat[i, j], :] + sigma_i_j_mat[i, j] * Z[i, :] / t_i[
-                    i] ** (1 / p)
+                B_j_list[j][h_i_j_mat[i, j], :] += sigma_i_j_mat[i, j] * Z[i, :] / t_i[i] ** (1 / p)
 
         # turnstile stream updates for Algo 3 (this works only for p=1!)
         f = np.random.randint(d ** 2, size=n)
@@ -361,8 +360,8 @@ class TurnstileSamplingExperiment(BaseExperiment):
         
         # QR decomposition for Algo3
         for i in range(n):
-            Z_1[f[i]] += g[i] * Z[i] # Pi1*Z
-            Z_2[(d ** 2) + f2[i]] += g2[i] * Z[i] # Pi2*Z
+            Z_[f[i]] += g[i] * Z[i, :] # Pi1*Z
+            Z_[(d ** 2) + f2[i]] += g2[i] * Z[i, :] # Pi2*Z
         R_ = np.linalg.qr(Z_, mode="r")
         R_inv = np.linalg.inv(R_)
         
