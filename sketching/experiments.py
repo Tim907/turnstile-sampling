@@ -346,21 +346,29 @@ class TurnstileSamplingExperiment(BaseExperiment):
         for j in range(s):
             B_j_list.append(np.zeros((size, d)))
 
-        # turnstile stream updates
+        # turnstile stream updates for Algo 1 & 2
         for i in range(n):
             for j in range(s):
                 B_j_list[j][h_i_j_mat[i, j], :] = B_j_list[j][h_i_j_mat[i, j], :] + sigma_i_j_mat[i, j] * Z[i, :] / t_i[
                     i] ** (1 / p)
 
-        # Multiplication B_j = B_j * R
+        # turnstile stream updates for Algo 3 (this works only for p=1!)
         f = np.random.randint(d ** 2, size=n)
-        g = np.random.randint(2, size=n) * 2 - 1
-        Z_ = np.zeros((d ** 2, d))
+        g = (np.random.randint(2, size=n) * 2 - 1) * d
+        f2 = np.random.randint(d ** 2, size=n)
+        g2 = np.random.standard_cauchy(n) / np.log(d)
+        Z_ = np.zeros((2*(d ** 2), d))
+        
+        # QR decomposition for Algo3
         for i in range(n):
-            Z_[f[i]] += g[i] * Z[i]
+            Z_1[f[i]] += g[i] * Z[i] # Pi1*Z
+            Z_2[(d ** 2) + f2[i]] += g2[i] * Z[i] # Pi2*Z
         R_ = np.linalg.qr(Z_, mode="r")
+        R_inv = np.linalg.inv(R_)
+        
+        # Post-Multiplication of sketches B_j = B_j * R
         for j in range(s):
-            B_j_list[j] = np.matmul(B_j_list[j], R_)
+            B_j_list[j] = np.matmul(B_j_list[j], R_inv)
 
         a_i_mat = np.zeros((n, d))
         v_i = np.zeros(n)
@@ -387,18 +395,20 @@ class TurnstileSamplingExperiment(BaseExperiment):
 
         reversed = reduced_matrix * t_i[:, np.newaxis] ** (1 / p)
         weights = (np.linalg.norm(reversed, ord=p, axis=1) ** p) / alpha
-        weights[weights < 1] = 1
+        weights[weights > 1] = 1
+        weights = 1/weights
+        reduced_matrix = np.matmul(reversed, R_)
 
         # Theorem 4.1 https://arxiv.org/pdf/1801.04414.pdf
-        reversed = reversed * d * np.log(d)
-        R_1 = reversed.shape[0]
-        R_2 = round(min(R_1, d ** 1.1))
+        # reversed = reversed * d * np.log(d)
+        # R_1 = reversed.shape[0]
+        # R_2 = round(min(R_1, d ** 1.1))
 
         # Random map with uniform probability
-        h = np.random.randint(0, R_2, n)
+        #h = np.random.randint(0, R_2, n)
 
-        Pi_2 = np.zeros((R_2, n))
-        Pi_2[h, np.arange(n)] = np.random.standard_cauchy(n)
+        #Pi_2 = np.zeros((R_2, n))
+        #Pi_2[h, np.arange(n)] = np.random.standard_cauchy(n)
 
         #row_indices = _rng.choice(n, size=size, replace=False)
         #reduced_matrix = Z[row_indices]
