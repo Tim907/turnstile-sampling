@@ -302,10 +302,6 @@ class TurnstileSamplingExperiment(BaseExperiment):
             max_size,
             step_size,
             num_runs,
-            h_max,
-            kyfan_percent,
-            sketchratio,
-            cohensketch,
             optimizer: optimizer.base_optimizer,
             algorithm
     ):
@@ -327,11 +323,11 @@ class TurnstileSamplingExperiment(BaseExperiment):
         Z = self.optimizer.get_Z()
         n = self.dataset.get_n()
         d = Z.shape[1]
-        size = config["size"]
-
+        k = config["size"] // 2
+        size = 10000
         s = 5
         p = 1
-        k = round(size * np.log(n) / 10)
+
         if s / 2 == s // 2:
             raise ValueError("S should be an odd number.")
 
@@ -369,19 +365,33 @@ class TurnstileSamplingExperiment(BaseExperiment):
         for j in range(s):
             B_j_list[j] = np.matmul(B_j_list[j], R_inv)
 
-        a_i_mat = np.zeros((n, d))
-        v_i = np.zeros(n)
-        for i in range(n):
-            a_i_j = np.zeros(s * d).reshape((s, d))
-            for j in range(s):
-                a_i_j[j, :] = sigma_i_j_mat[i, j] * B_j_list[j][h_i_j_mat[i, j]]
+        # ----Trivial implementation but much slower
+        # a_i_mat_old = np.zeros((n, d))
+        # v_i_old = np.zeros(n)
+        # for i in range(n):
+        #     a_i_j = np.zeros(s * d).reshape((s, d))
+        #     for j in range(s):
+        #         a_i_j[j, :] = sigma_i_j_mat[i, j] * B_j_list[j][h_i_j_mat[i, j]]
+        #
+        #     temp = np.linalg.norm(a_i_j, ord=p, axis=1) ** p
+        #     ind = np.argsort(temp)
+        #     index_of_median = ind[len(ind) // 2]
+        #     v_i_old[i] = temp[index_of_median]
+        #     a_i_mat_old[i, :] = a_i_j[index_of_median, :]
 
-            v_i[i] = np.median(np.linalg.norm(a_i_j, ord=p, axis=1) ** p)
-            # Find j minimizing median
-            temp = np.zeros(s)
-            for j in range(s):
-                temp[j] = np.median(np.linalg.norm(a_i_j[j, :] - a_i_j, ord=p, axis=1) ** p) # median of s elements
-            a_i_mat[i, :] = a_i_j[np.argmin(temp), :]
+        # Compute a_i_j cube using vectorized operations
+        a_i_j = np.stack([sigma_i_j_mat[:, j, np.newaxis] * B_j_list[j][h_i_j_mat[:, j]] for j in range(s)], axis=-1)
+        # Compute the norm along axis j and raise it to the power of p
+        temp = np.linalg.norm(a_i_j, ord=p, axis=1) ** p
+        # Find the index of the median along axis j
+        ind = np.argpartition(temp, s // 2, axis=1)[:, s // 2]
+        v_i = temp[np.arange(n), ind]
+        a_i_mat = a_i_j[np.arange(n), :, ind]
+
+        # Test equality of implementation
+        # print(np.isclose(v_i, v_i_old).all())
+        # print(np.isclose(a_i_mat, a_i_mat_old).all())
+        # -> is equal
 
         # Select a_i with k largest v_i
         index_of_largest = np.argsort(-v_i)[0:k]
@@ -398,20 +408,10 @@ class TurnstileSamplingExperiment(BaseExperiment):
         weights = 1/weights
         reduced_matrix = np.matmul(reversed, R_)
 
-        # Theorem 4.1 https://arxiv.org/pdf/1801.04414.pdf
-        # reversed = reversed * d * np.log(d)
-        # R_1 = reversed.shape[0]
-        # R_2 = round(min(R_1, d ** 1.1))
-
-        # Random map with uniform probability
-        #h = np.random.randint(0, R_2, n)
-
-        #Pi_2 = np.zeros((R_2, n))
-        #Pi_2[h, np.arange(n)] = np.random.standard_cauchy(n)
-
-        #row_indices = _rng.choice(n, size=size, replace=False)
-        #reduced_matrix = Z[row_indices]
-        #weights = weights[row_indices]
+        # uniform sampling of k / 2
+        row_indices = np.random.choice(n, size=k, replace=False)
+        reduced_matrix = np.vstack((reduced_matrix, Z[row_indices, :]))
+        weights = np.concatenate((weights, np.ones(k) * 2 * n / k))
         return reduced_matrix, weights
 
     def optimize(self, reduced_matrix, weights):

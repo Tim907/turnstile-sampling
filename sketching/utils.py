@@ -47,15 +47,11 @@ def run_experiments(dataset: Dataset, min_size, max_size, step_size, num_runs, a
     logger.info("Starting turnstile experiment")
     experiment_sketching = TurnstileSamplingExperiment(
         dataset=dataset,
-        results_filename=settings.RESULTS_DIR / f"{dataset.get_name()}_cosketching2.csv",
+        results_filename=settings.RESULTS_DIR / f"{dataset.get_name()}.csv",
         min_size=min_size,
         max_size=max_size,
         step_size=step_size,
         num_runs=num_runs,
-        h_max=1,
-        kyfan_percent=1,
-        sketchratio= 2/3,
-        cohensketch=2,
         optimizer=optimizer.base_optimizer(),
         algorithm=2
     )

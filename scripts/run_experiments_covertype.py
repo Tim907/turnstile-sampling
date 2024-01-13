@@ -12,10 +12,10 @@ Inside the function utils.run_experiments, different optimizers can be configure
 logistic likelihood, variance-regularized logistic likelihood, L1-optimization and SGD
 """
 
-MIN_SIZE = 1000
+MIN_SIZE = 2000
 MAX_SIZE = 20000
 STEP_SIZE = 2000
-NUM_RUNS = 21
+NUM_RUNS = 3
 
 dataset = Covertype_Sklearn(use_caching=False)
 

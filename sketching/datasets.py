@@ -465,3 +465,20 @@ class Synthetic_Dataset_Cohen(Dataset):
         y = block[:, -1]
 
         return X, y
+
+
+class All_Ones(Dataset):
+    def __init__(self, n_rows, d_cols, use_caching=False):
+        self.n_rows = n_rows
+        self.d_cols = d_cols
+        super().__init__(use_caching=use_caching)
+
+    def get_name(self):
+        return f"all_ones_n_{self.n_rows}_d_{self.d_cols}"
+
+    def load_X_y(self):
+
+        X = np.ones((self.n_rows, self.d_cols))
+        y = np.ones(self.n_rows)
+
+        return X, y
