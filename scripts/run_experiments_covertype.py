@@ -15,7 +15,7 @@ logistic likelihood, variance-regularized logistic likelihood, L1-optimization a
 MIN_SIZE = 2000
 MAX_SIZE = 20000
 STEP_SIZE = 2000
-NUM_RUNS = 3
+NUM_RUNS = 5
 
 dataset = Covertype_Sklearn(use_caching=False)
 
@@ -25,5 +25,5 @@ run_experiments(
     max_size=MAX_SIZE,
     step_size=STEP_SIZE,
     num_runs=NUM_RUNS,
-    add=False
+    add=False,
 )

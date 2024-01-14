@@ -217,3 +217,79 @@
 2024-01-13 22:46:06;INFO;Current experimental config: {'run': 3, 'size': 20}
 2024-01-13 22:46:09;INFO;Writing results to C:\Users\Traitor\Documents\GitHub\turnstile-sampling\experimental-results\all_ones_n_100000_d_1.csv
 2024-01-13 22:46:09;INFO;Done.
+2024-01-14 22:15:25;INFO;Starting turnstile experiment
+2024-01-14 22:15:25;INFO;Loading X and y...
+2024-01-14 22:15:25;INFO;Fetching covertype from sklearn...
+2024-01-14 22:15:26;INFO;Preprocessing...
+2024-01-14 22:15:26;INFO;Done.
+2024-01-14 22:15:26;INFO;Computing beta_opt...
+2024-01-14 22:16:36;INFO;Done.
+2024-01-14 22:16:36;INFO;Running experiments...
+2024-01-14 22:16:36;INFO;Current experimental config: {'run': 1, 'size': 2000}
+2024-01-14 22:17:12;INFO;Starting turnstile experiment
+2024-01-14 22:17:12;INFO;Loading X and y...
+2024-01-14 22:17:12;INFO;Fetching covertype from sklearn...
+2024-01-14 22:17:13;INFO;Preprocessing...
+2024-01-14 22:17:14;INFO;Done.
+2024-01-14 22:17:14;INFO;Computing beta_opt...
+2024-01-14 22:18:36;INFO;Done.
+2024-01-14 22:18:36;INFO;Running experiments...
+2024-01-14 22:18:36;INFO;Current experimental config: {'run': 1, 'size': 2000}
+2024-01-14 22:18:57;INFO;Current experimental config: {'run': 2, 'size': 2000}
+2024-01-14 22:19:18;INFO;Current experimental config: {'run': 3, 'size': 2000}
+2024-01-14 22:19:39;INFO;Current experimental config: {'run': 4, 'size': 2000}
+2024-01-14 22:19:59;INFO;Current experimental config: {'run': 5, 'size': 2000}
+2024-01-14 22:20:20;INFO;Current experimental config: {'run': 1, 'size': 4000}
+2024-01-14 22:20:40;INFO;Current experimental config: {'run': 2, 'size': 4000}
+2024-01-14 22:21:00;INFO;Current experimental config: {'run': 3, 'size': 4000}
+2024-01-14 22:21:20;INFO;Current experimental config: {'run': 4, 'size': 4000}
+2024-01-14 22:21:40;INFO;Current experimental config: {'run': 5, 'size': 4000}
+2024-01-14 22:22:00;INFO;Current experimental config: {'run': 1, 'size': 6000}
+2024-01-14 22:22:20;INFO;Current experimental config: {'run': 2, 'size': 6000}
+2024-01-14 22:22:42;INFO;Current experimental config: {'run': 3, 'size': 6000}
+2024-01-14 22:23:02;INFO;Current experimental config: {'run': 4, 'size': 6000}
+2024-01-14 22:23:23;INFO;Current experimental config: {'run': 5, 'size': 6000}
+2024-01-14 22:23:43;INFO;Current experimental config: {'run': 1, 'size': 8000}
+2024-01-14 22:24:05;INFO;Current experimental config: {'run': 2, 'size': 8000}
+2024-01-14 22:24:25;INFO;Current experimental config: {'run': 3, 'size': 8000}
+2024-01-14 22:24:46;INFO;Current experimental config: {'run': 4, 'size': 8000}
+2024-01-14 22:25:06;INFO;Current experimental config: {'run': 5, 'size': 8000}
+2024-01-14 22:25:27;INFO;Current experimental config: {'run': 1, 'size': 10000}
+2024-01-14 22:25:49;INFO;Current experimental config: {'run': 2, 'size': 10000}
+2024-01-14 22:26:09;INFO;Current experimental config: {'run': 3, 'size': 10000}
+2024-01-14 22:26:30;INFO;Current experimental config: {'run': 4, 'size': 10000}
+2024-01-14 22:26:51;INFO;Current experimental config: {'run': 5, 'size': 10000}
+2024-01-14 22:27:12;INFO;Current experimental config: {'run': 1, 'size': 12000}
+2024-01-14 22:27:33;INFO;Current experimental config: {'run': 2, 'size': 12000}
+2024-01-14 22:27:53;INFO;Current experimental config: {'run': 3, 'size': 12000}
+2024-01-14 22:28:14;INFO;Current experimental config: {'run': 4, 'size': 12000}
+2024-01-14 22:28:35;INFO;Current experimental config: {'run': 5, 'size': 12000}
+2024-01-14 22:28:58;INFO;Current experimental config: {'run': 1, 'size': 14000}
+2024-01-14 22:29:19;INFO;Current experimental config: {'run': 2, 'size': 14000}
+2024-01-14 22:29:41;INFO;Current experimental config: {'run': 3, 'size': 14000}
+2024-01-14 22:30:03;INFO;Current experimental config: {'run': 4, 'size': 14000}
+2024-01-14 22:30:24;INFO;Current experimental config: {'run': 5, 'size': 14000}
+2024-01-14 22:30:45;INFO;Current experimental config: {'run': 1, 'size': 16000}
+2024-01-14 22:31:06;INFO;Current experimental config: {'run': 2, 'size': 16000}
+2024-01-14 22:31:27;INFO;Current experimental config: {'run': 3, 'size': 16000}
+2024-01-14 22:31:49;INFO;Current experimental config: {'run': 4, 'size': 16000}
+2024-01-14 22:32:09;INFO;Current experimental config: {'run': 5, 'size': 16000}
+2024-01-14 22:32:30;INFO;Current experimental config: {'run': 1, 'size': 18000}
+2024-01-14 22:32:52;INFO;Current experimental config: {'run': 2, 'size': 18000}
+2024-01-14 22:33:13;INFO;Current experimental config: {'run': 3, 'size': 18000}
+2024-01-14 22:33:34;INFO;Current experimental config: {'run': 4, 'size': 18000}
+2024-01-14 22:33:56;INFO;Current experimental config: {'run': 5, 'size': 18000}
+2024-01-14 22:34:18;INFO;Current experimental config: {'run': 1, 'size': 20000}
+2024-01-14 22:34:39;INFO;Current experimental config: {'run': 2, 'size': 20000}
+2024-01-14 22:35:00;INFO;Current experimental config: {'run': 3, 'size': 20000}
+2024-01-14 22:35:22;INFO;Current experimental config: {'run': 4, 'size': 20000}
+2024-01-14 22:35:44;INFO;Current experimental config: {'run': 5, 'size': 20000}
+2024-01-14 22:36:05;INFO;Writing results to C:\Users\Traitor\Documents\GitHub\turnstile-sampling\experimental-results\covertype_sklearn.csv
+2024-01-14 22:36:05;INFO;Done.
+2024-01-14 22:38:25;INFO;Starting turnstile experiment
+2024-01-14 22:38:25;INFO;Loading X and y...
+2024-01-14 22:38:25;INFO;Done.
+2024-01-14 22:38:25;INFO;Computing beta_opt...
+2024-01-14 22:38:26;INFO;Done.
+2024-01-14 22:38:26;INFO;Running experiments...
+2024-01-14 22:38:26;INFO;Current experimental config: {'run': 1, 'size': 20}

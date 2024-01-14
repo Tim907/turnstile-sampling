@@ -303,10 +303,8 @@ class TurnstileSamplingExperiment(BaseExperiment):
             step_size,
             num_runs,
             optimizer: optimizer.base_optimizer,
-            algorithm
+            factor_unif
     ):
-        if algorithm not in {2, 3}:
-            raise ValueError("Algorithm must be one of {2, 3}.")
         super().__init__(
             num_runs=num_runs,
             min_size=min_size,
@@ -316,15 +314,16 @@ class TurnstileSamplingExperiment(BaseExperiment):
             results_filename=results_filename,
             optimizer=optimizer,
         )
-        self.algorithm = algorithm
+        self.factor_unif = factor_unif
 
 
     def get_reduced_matrix_and_weights(self, config):
         Z = self.optimizer.get_Z()
         n = self.dataset.get_n()
         d = Z.shape[1]
-        k = config["size"] // 2
-        size = 10000
+        k_unif = round(self.factor_unif * config["size"])  # uniform samples
+        k = config["size"] - k_unif  # remaining samples of the sketch
+        size = round(min(2 * k, k * np.log(n) / 10))
         s = 5
         p = 1
 
@@ -408,10 +407,10 @@ class TurnstileSamplingExperiment(BaseExperiment):
         weights = 1/weights
         reduced_matrix = np.matmul(reversed, R_)
 
-        # uniform sampling of k / 2
-        row_indices = np.random.choice(n, size=k, replace=False)
+        # uniform sampling of k_unif
+        row_indices = np.random.choice(n, size=k_unif, replace=False)
         reduced_matrix = np.vstack((reduced_matrix, Z[row_indices, :]))
-        weights = np.concatenate((weights, np.ones(k) * 2 * n / k))
+        weights = np.concatenate((weights, np.ones(k_unif) * n / k))
         return reduced_matrix, weights
 
     def optimize(self, reduced_matrix, weights):
