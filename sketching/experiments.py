@@ -329,7 +329,7 @@ class TurnstileSamplingExperiment(BaseExperiment):
         
         k_unif = round(self.factor_unif * config["size"])  # uniform samples
         k = config["size"] - k_unif  # remaining samples of the sketch
-        size = 2000 # 2 * round( k * max(50, np.log(n) ) )
+        size = 1000 # 2 * round( k * max(50, np.log(n) ) )
         s = 7 # 2 * round( max(7, np.log(n)/2 ) ) + 1
         p = 1
 
@@ -357,12 +357,12 @@ class TurnstileSamplingExperiment(BaseExperiment):
                 B_j_list[j][h_i_j_mat[i, j], :] += sigma_i_j_mat[i, j] * Z[i, :] / t_i[i] ** (1 / p)
 
         # turnstile stream updates for Algo 3
-        f = np.random.randint(d ** 2, size=n)
-        g = (np.random.randint(2, size=n) * 2 - 1) * d
+        f = np.random.randint(2*(d ** 2), size=n)
+        g = (np.random.randint(2, size=n) * 2 - 1) # * d
         lamb = expon.rvs(size=n)
         #f2 = np.random.randint(d ** 2, size=n)
         #g2 = np.random.standard_cauchy(n) / np.log(d)
-        Z_ = np.zeros((2*(d ** 2), d))
+        Z_ = np.zeros((2*(d**2),d))
         
         # QR decomposition for Algo3
         #for i in range(n):
