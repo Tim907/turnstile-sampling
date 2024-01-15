@@ -329,8 +329,8 @@ class TurnstileSamplingExperiment(BaseExperiment):
         
         k_unif = round(self.factor_unif * config["size"])  # uniform samples
         k = config["size"] - k_unif  # remaining samples of the sketch
-        size = 1000 # 2 * round( k * max(50, np.log(n) ) )
-        s = 7 # 2 * round( max(7, np.log(n)/2 ) ) + 1
+        size = round( k * max(30, np.log(n) ) )
+        s = 2 * round( max(3, np.log(n)/3 ) ) + 1
         p = 1
 
         print("Unif: "+str(self.factor_unif))
@@ -424,7 +424,7 @@ class TurnstileSamplingExperiment(BaseExperiment):
         row_indices = np.random.choice(n, size=k_unif, replace=False)
         reduced_matrix = np.vstack((reduced_matrix, Z[row_indices, :]))
         weights = np.concatenate((weights, np.ones(k_unif) * n / k))
-        print(reduced_matrix)
+        #print(reduced_matrix)
         print("\nreduced_matrix distribution:\n")
         print(pd.Series(reduced_matrix[:,0]).describe())
         print("\nweights distribution:\n")
