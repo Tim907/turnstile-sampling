@@ -53,7 +53,7 @@ def run_experiments(dataset: Dataset, min_size, max_size, step_size, num_runs, a
         step_size=step_size,
         num_runs=num_runs,
         optimizer=optimizer.base_optimizer(),
-        factor_unif=0.3
+        factor_unif=0.5
     )
     experiment_sketching.run(parallel=False, add=add)
 

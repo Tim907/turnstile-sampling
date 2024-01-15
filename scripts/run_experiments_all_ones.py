@@ -6,7 +6,7 @@ from sketching.utils import run_experiments
 MIN_SIZE = 20
 MAX_SIZE = 20
 STEP_SIZE = 1
-NUM_RUNS = 3
+NUM_RUNS = 1
 
 dataset = All_Ones(n_rows=100000, d_cols=1, use_caching=False)
 

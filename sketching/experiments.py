@@ -6,6 +6,7 @@ import os
 import numpy as np
 import pandas as pd
 from joblib import Parallel, delayed
+from scipy.stats import expon
 
 from . import optimizer, settings
 from .datasets import Dataset
@@ -318,15 +319,24 @@ class TurnstileSamplingExperiment(BaseExperiment):
 
 
     def get_reduced_matrix_and_weights(self, config):
+        np.set_printoptions(formatter={'float': lambda x: "{0:0.3f}".format(x)})
+        
         Z = self.optimizer.get_Z()
         n = self.dataset.get_n()
         d = Z.shape[1]
+        
+        self.factor_unif = 0.0
+        
         k_unif = round(self.factor_unif * config["size"])  # uniform samples
         k = config["size"] - k_unif  # remaining samples of the sketch
-        size = round(min(2 * k, k * np.log(n) / 10))
-        s = 5
+        size = 2000 # 2 * round( k * max(50, np.log(n) ) )
+        s = 7 # 2 * round( max(7, np.log(n)/2 ) ) + 1
         p = 1
 
+        print("Unif: "+str(self.factor_unif))
+        print("Size (r): "+str(size))
+        print("Size (s): "+str(s))
+        
         if s / 2 == s // 2:
             raise ValueError("S should be an odd number.")
 
@@ -346,19 +356,22 @@ class TurnstileSamplingExperiment(BaseExperiment):
             for j in range(s):
                 B_j_list[j][h_i_j_mat[i, j], :] += sigma_i_j_mat[i, j] * Z[i, :] / t_i[i] ** (1 / p)
 
-        # turnstile stream updates for Algo 3 (this works only for p=1!)
+        # turnstile stream updates for Algo 3
         f = np.random.randint(d ** 2, size=n)
         g = (np.random.randint(2, size=n) * 2 - 1) * d
-        f2 = np.random.randint(d ** 2, size=n)
-        g2 = np.random.standard_cauchy(n) / np.log(d)
+        lamb = expon.rvs(size=n)
+        #f2 = np.random.randint(d ** 2, size=n)
+        #g2 = np.random.standard_cauchy(n) / np.log(d)
         Z_ = np.zeros((2*(d ** 2), d))
         
         # QR decomposition for Algo3
+        #for i in range(n):
+        #    Z_[f[i]] += g[i] * Z[i, :] # Pi1*Z
+        #    Z_[(d ** 2) + f2[i]] += g2[i] * Z[i, :] # Pi2*Z
         for i in range(n):
-            Z_[f[i]] += g[i] * Z[i, :] # Pi1*Z
-            Z_[(d ** 2) + f2[i]] += g2[i] * Z[i, :] # Pi2*Z
+            Z_[f[i]] += g[i] * Z[i, :] / np.power(lamb[1],1/p) # Pi*Z
         R_ = np.linalg.qr(Z_, mode="r")
-        R_inv = np.linalg.inv(R_)
+        R_inv = np.linalg.pinv(R_)
         
         # Post-Multiplication of sketches B_j = B_j * R
         for j in range(s):
@@ -411,6 +424,12 @@ class TurnstileSamplingExperiment(BaseExperiment):
         row_indices = np.random.choice(n, size=k_unif, replace=False)
         reduced_matrix = np.vstack((reduced_matrix, Z[row_indices, :]))
         weights = np.concatenate((weights, np.ones(k_unif) * n / k))
+        print(reduced_matrix)
+        print("\nreduced_matrix distribution:\n")
+        print(pd.Series(reduced_matrix[:,0]).describe())
+        print("\nweights distribution:\n")
+        print(pd.Series(weights).describe())
+        #print(weights)
         return reduced_matrix, weights
 
     def optimize(self, reduced_matrix, weights):
