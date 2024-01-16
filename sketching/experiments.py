@@ -330,7 +330,7 @@ class TurnstileSamplingExperiment(BaseExperiment):
         k_unif = round(self.factor_unif * config["size"])  # uniform samples
         k = config["size"] - k_unif  # remaining samples of the sketch
         size = round( k * max(30, np.log(n) ) )
-        s = 2 * round( max(3, np.log(n)/3 ) ) + 1
+        s = 2 * round( max(5, np.log(n)/2 ) ) + 1
         p = 1
 
         print("Unif: "+str(self.factor_unif))
