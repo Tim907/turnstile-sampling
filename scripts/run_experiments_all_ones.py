@@ -3,8 +3,8 @@ import numpy as np
 from sketching.datasets import Covertype_Sklearn, All_Ones
 from sketching.utils import run_experiments
 
-MIN_SIZE = 200
-MAX_SIZE = 200
+MIN_SIZE = 20
+MAX_SIZE = 20
 STEP_SIZE = 1
 NUM_RUNS = 1
 

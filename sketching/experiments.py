@@ -325,7 +325,7 @@ class TurnstileSamplingExperiment(BaseExperiment):
         n = self.dataset.get_n()
         d = Z.shape[1]
         
-        self.factor_unif = 0.0
+        self.factor_unif = 0.2
         
         k_unif = round(self.factor_unif * config["size"])  # uniform samples
         k = config["size"] - k_unif  # remaining samples of the sketch
@@ -422,7 +422,7 @@ class TurnstileSamplingExperiment(BaseExperiment):
         alpha = np.min(np.linalg.norm(reduced_matrix[np.argsort(norms)[0:k], :], ord=p, axis=1) ** p)
 
         reversed = reduced_matrix * t_i[:, np.newaxis] ** (1 / p)
-        weights = (np.linalg.norm(reversed, ord=p, axis=1) ** p) / alpha
+        weights = (np.linalg.norm(reversed, ord=p, axis=1) ** p) / alpha + k_unif / n
         weights[weights > 1] = 1
         weights = 1/weights
         reduced_matrix = np.matmul(reversed, R_)
@@ -430,13 +430,20 @@ class TurnstileSamplingExperiment(BaseExperiment):
         # uniform sampling of k_unif
         row_indices = np.random.choice(n, size=k_unif, replace=False)
         reduced_matrix = np.vstack((reduced_matrix, Z[row_indices, :]))
-        weights = np.concatenate((weights, np.ones(k_unif) * n / k))
+        samples = np.matmul(Z[row_indices, :], R_inv)
+        norms_unif = np.linalg.norm(samples/alpha, ord=p, axis=1) ** p + k_unif/n
+        norms_unif[norms_unif > 1] = 1
+        norms_unif = 1/norms_unif
+        weights = np.concatenate((weights, norms_unif))
         #print(reduced_matrix)
         print("\nreduced_matrix distribution:\n")
         print(pd.Series(reduced_matrix[:,0]).describe())
         print("\nweights distribution:\n")
         print(pd.Series(weights).describe())
-        #print(weights)
+        print(weights)
+        print(n)
+        print(np.sum(weights))
+        return reduced_matrix, weights
 
         # TODO REMOVE
         print("reduced_matrix mit negativen Vorzeichen:", np.sum(reduced_matrix < 0))
