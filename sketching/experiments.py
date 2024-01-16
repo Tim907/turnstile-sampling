@@ -364,12 +364,12 @@ class TurnstileSamplingExperiment(BaseExperiment):
                 B_j_list[j][h_i_j_mat[i, j], :] += sigma_i_j_mat[i, j] * Z[i, :] / t_i[i] ** (1 / p)
 
         # turnstile stream updates for Algo 3
-        f = np.random.randint(2*(d ** 2), size=n)
+        f = np.random.randint((d ** 2), size=n)
         g = (np.random.randint(2, size=n) * 2 - 1) # * d
         lamb = expon.rvs(size=n)
         #f2 = np.random.randint(d ** 2, size=n)
         #g2 = np.random.standard_cauchy(n) / np.log(d)
-        Z_ = np.zeros((2*(d**2),d))
+        Z_ = np.zeros(((d**2),d))
         
         # QR decomposition for Algo3
         #for i in range(n):
