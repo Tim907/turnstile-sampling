@@ -340,6 +340,13 @@ class TurnstileSamplingExperiment(BaseExperiment):
         if s / 2 == s // 2:
             raise ValueError("S should be an odd number.")
 
+
+        # TODO REMOVE fixed random seed for debugging
+        np.random.seed(0)
+        k = 1000
+        size = 10000
+        s = 2 * round( max(5, np.log(n)/2 ) ) + 1
+
         # zero indexed hash maps of size n x s
         h_i_j_mat = np.random.randint(0, size, n*s).reshape((n, s))
         # mapping function to determine the sign {-1,1}
@@ -430,6 +437,19 @@ class TurnstileSamplingExperiment(BaseExperiment):
         print("\nweights distribution:\n")
         print(pd.Series(weights).describe())
         #print(weights)
+
+        # TODO REMOVE
+        print("reduced_matrix mit negativen Vorzeichen:", np.sum(reduced_matrix < 0))
+        # Row indices which have negative sign
+        ind = np.unique(np.argwhere(reduced_matrix < 0)[:, 0])
+        reduced_matrix[ind, :]
+        t_i[ind]
+        a_i_mat[index_of_largest[ind], :]
+        a_i_j[index_of_largest[ind[7]], :, :]
+        (np.linalg.norm(a_i_j, ord=p, axis=1) ** p)[index_of_largest[ind[7]], :]
+        np.sum(a_i_mat[index_of_largest[np.delete(np.arange(k), ind)], :] < 0)
+        pd.Series(v_i[index_of_largest]).describe()
+
         return reduced_matrix, weights
 
     def optimize(self, reduced_matrix, weights):
