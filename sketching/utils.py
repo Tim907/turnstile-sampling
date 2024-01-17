@@ -7,6 +7,7 @@ from .experiments import (
     ObliviousSketchingExperiment,
     TurnstileSamplingExperiment,
     UniformSamplingExperiment,
+    LeverageScoreSamplingExperiment
 )
 
 logger = logging.getLogger(settings.LOGGER_NAME)
@@ -44,16 +45,28 @@ def run_experiments(dataset: Dataset, min_size, max_size, step_size, num_runs, a
     if not settings.RESULTS_DIR.exists():
         settings.RESULTS_DIR.mkdir()
 
+    # logger.info("Starting leverage sampling experiment")
+    # experiment_leverage = LeverageScoreSamplingExperiment(
+    #     dataset=dataset,
+    #     results_filename=settings.RESULTS_DIR / f"{dataset.get_name()}_leverage.csv",
+    #     min_size=min_size,
+    #     max_size=max_size,
+    #     step_size=step_size,
+    #     num_runs=num_runs,
+    #     optimizer=optimizer.base_optimizer(),
+    # )
+    # experiment_leverage.run(parallel=False, add=add)
+
     logger.info("Starting turnstile experiment")
     experiment_sketching = TurnstileSamplingExperiment(
         dataset=dataset,
-        results_filename=settings.RESULTS_DIR / f"{dataset.get_name()}.csv",
+        results_filename=settings.RESULTS_DIR / f"{dataset.get_name()}_turnstile.csv",
         min_size=min_size,
         max_size=max_size,
         step_size=step_size,
         num_runs=num_runs,
         optimizer=optimizer.base_optimizer(),
-        factor_unif=0.5
+        factor_unif=0.2
     )
     experiment_sketching.run(parallel=False, add=add)
 
