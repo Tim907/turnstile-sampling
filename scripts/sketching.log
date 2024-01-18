@@ -643,3 +643,309 @@
 2024-01-17 23:36:43;INFO;Current experimental config: {'run': 1, 'size': 21000}
 2024-01-17 23:37:43;INFO;Writing results to C:\Users\Traitor\Documents\GitHub\turnstile-sampling\experimental-results\covertype_sklearn_turnstile.csv
 2024-01-17 23:37:43;INFO;Done.
+2024-01-18 11:48:03;INFO;Starting turnstile experiment
+2024-01-18 11:48:03;INFO;Loading X and y...
+2024-01-18 11:48:03;INFO;Fetching covertype from sklearn...
+2024-01-18 11:48:04;INFO;Preprocessing...
+2024-01-18 11:48:05;INFO;Done.
+2024-01-18 11:48:05;INFO;Computing beta_opt...
+2024-01-18 11:48:15;INFO;Starting turnstile experiment
+2024-01-18 11:48:15;INFO;Loading X and y...
+2024-01-18 11:48:15;INFO;Done.
+2024-01-18 11:48:15;INFO;Computing beta_opt...
+2024-01-18 11:48:17;INFO;Done.
+2024-01-18 11:48:17;INFO;Running experiments...
+2024-01-18 11:48:17;INFO;Current experimental config: {'run': 1, 'size': 20}
+2024-01-18 11:56:39;INFO;Starting turnstile experiment
+2024-01-18 11:56:39;INFO;Loading X and y...
+2024-01-18 11:56:39;INFO;Done.
+2024-01-18 11:56:39;INFO;Computing beta_opt...
+2024-01-18 11:56:40;INFO;Done.
+2024-01-18 11:56:40;INFO;Running experiments...
+2024-01-18 11:56:40;INFO;Current experimental config: {'run': 1, 'size': 20}
+2024-01-18 11:58:14;INFO;Starting turnstile experiment
+2024-01-18 11:58:14;INFO;Loading X and y...
+2024-01-18 11:58:14;INFO;Done.
+2024-01-18 11:58:14;INFO;Computing beta_opt...
+2024-01-18 11:58:15;INFO;Done.
+2024-01-18 11:58:15;INFO;Running experiments...
+2024-01-18 11:58:15;INFO;Current experimental config: {'run': 1, 'size': 20}
+2024-01-18 11:58:23;INFO;Writing results to C:\Users\Traitor\Documents\GitHub\turnstile-sampling\experimental-results\all_ones_n_100000_d_1_turnstile.csv
+2024-01-18 11:58:23;INFO;Done.
+2024-01-18 11:58:42;INFO;Starting turnstile experiment
+2024-01-18 11:58:42;INFO;Loading X and y...
+2024-01-18 11:58:42;INFO;Fetching covertype from sklearn...
+2024-01-18 11:58:43;INFO;Preprocessing...
+2024-01-18 11:58:43;INFO;Done.
+2024-01-18 11:58:43;INFO;Computing beta_opt...
+2024-01-18 12:00:18;INFO;Done.
+2024-01-18 12:00:18;INFO;Running experiments...
+2024-01-18 12:00:18;INFO;Current experimental config: {'run': 1, 'size': 1000}
+2024-01-18 12:01:11;INFO;Current experimental config: {'run': 1, 'size': 3000}
+2024-01-18 12:02:03;INFO;Current experimental config: {'run': 1, 'size': 5000}
+2024-01-18 12:02:57;INFO;Current experimental config: {'run': 1, 'size': 7000}
+2024-01-18 12:03:51;INFO;Current experimental config: {'run': 1, 'size': 9000}
+2024-01-18 12:04:48;INFO;Current experimental config: {'run': 1, 'size': 11000}
+2024-01-18 12:05:43;INFO;Current experimental config: {'run': 1, 'size': 13000}
+2024-01-18 12:06:44;INFO;Current experimental config: {'run': 1, 'size': 15000}
+2024-01-18 12:07:51;INFO;Current experimental config: {'run': 1, 'size': 17000}
+2024-01-18 12:08:55;INFO;Current experimental config: {'run': 1, 'size': 19000}
+2024-01-18 12:09:56;INFO;Current experimental config: {'run': 1, 'size': 21000}
+2024-01-18 12:11:00;INFO;Writing results to C:\Users\Traitor\Documents\GitHub\turnstile-sampling\experimental-results\covertype_sklearn_turnstile.csv
+2024-01-18 12:11:00;INFO;Done.
+2024-01-18 12:13:29;INFO;Starting turnstile experiment
+2024-01-18 12:13:29;INFO;Loading X and y...
+2024-01-18 12:13:29;INFO;Fetching covertype from sklearn...
+2024-01-18 12:13:30;INFO;Preprocessing...
+2024-01-18 12:13:31;INFO;Done.
+2024-01-18 12:13:31;INFO;Computing beta_opt...
+2024-01-18 12:15:25;INFO;Done.
+2024-01-18 12:15:25;INFO;Running experiments...
+2024-01-18 12:15:25;INFO;Current experimental config: {'run': 1, 'size': 1000}
+2024-01-18 12:20:32;INFO;Starting turnstile experiment
+2024-01-18 12:20:32;INFO;Loading X and y...
+2024-01-18 12:20:32;INFO;Fetching covertype from sklearn...
+2024-01-18 12:20:32;INFO;Preprocessing...
+2024-01-18 12:20:33;INFO;Done.
+2024-01-18 12:20:33;INFO;Computing beta_opt...
+2024-01-18 12:21:40;INFO;Starting turnstile experiment
+2024-01-18 12:21:40;INFO;Loading X and y...
+2024-01-18 12:21:40;INFO;Fetching covertype from sklearn...
+2024-01-18 12:21:40;INFO;Preprocessing...
+2024-01-18 12:21:41;INFO;Done.
+2024-01-18 12:21:41;INFO;Computing beta_opt...
+2024-01-18 12:22:50;INFO;Done.
+2024-01-18 12:22:50;INFO;Running experiments...
+2024-01-18 12:22:50;INFO;Current experimental config: {'run': 1, 'size': 1000}
+2024-01-18 12:23:42;INFO;Current experimental config: {'run': 2, 'size': 1000}
+2024-01-18 12:24:38;INFO;Current experimental config: {'run': 3, 'size': 1000}
+2024-01-18 12:25:31;INFO;Current experimental config: {'run': 4, 'size': 1000}
+2024-01-18 12:26:24;INFO;Current experimental config: {'run': 5, 'size': 1000}
+2024-01-18 12:27:18;INFO;Current experimental config: {'run': 6, 'size': 1000}
+2024-01-18 12:28:11;INFO;Current experimental config: {'run': 7, 'size': 1000}
+2024-01-18 12:29:04;INFO;Current experimental config: {'run': 8, 'size': 1000}
+2024-01-18 12:29:59;INFO;Current experimental config: {'run': 9, 'size': 1000}
+2024-01-18 12:30:54;INFO;Current experimental config: {'run': 10, 'size': 1000}
+2024-01-18 12:31:47;INFO;Current experimental config: {'run': 11, 'size': 1000}
+2024-01-18 12:32:41;INFO;Current experimental config: {'run': 12, 'size': 1000}
+2024-01-18 12:33:35;INFO;Current experimental config: {'run': 13, 'size': 1000}
+2024-01-18 12:34:28;INFO;Current experimental config: {'run': 14, 'size': 1000}
+2024-01-18 12:35:21;INFO;Current experimental config: {'run': 15, 'size': 1000}
+2024-01-18 12:36:14;INFO;Current experimental config: {'run': 16, 'size': 1000}
+2024-01-18 12:37:06;INFO;Current experimental config: {'run': 17, 'size': 1000}
+2024-01-18 12:38:00;INFO;Current experimental config: {'run': 18, 'size': 1000}
+2024-01-18 12:38:53;INFO;Current experimental config: {'run': 19, 'size': 1000}
+2024-01-18 12:39:47;INFO;Current experimental config: {'run': 20, 'size': 1000}
+2024-01-18 12:40:40;INFO;Current experimental config: {'run': 21, 'size': 1000}
+2024-01-18 12:41:34;INFO;Current experimental config: {'run': 1, 'size': 3000}
+2024-01-18 12:42:27;INFO;Current experimental config: {'run': 2, 'size': 3000}
+2024-01-18 12:43:23;INFO;Current experimental config: {'run': 3, 'size': 3000}
+2024-01-18 12:44:15;INFO;Current experimental config: {'run': 4, 'size': 3000}
+2024-01-18 12:45:08;INFO;Current experimental config: {'run': 5, 'size': 3000}
+2024-01-18 12:46:02;INFO;Current experimental config: {'run': 6, 'size': 3000}
+2024-01-18 12:46:56;INFO;Current experimental config: {'run': 7, 'size': 3000}
+2024-01-18 12:47:48;INFO;Current experimental config: {'run': 8, 'size': 3000}
+2024-01-18 12:48:42;INFO;Current experimental config: {'run': 9, 'size': 3000}
+2024-01-18 12:49:36;INFO;Current experimental config: {'run': 10, 'size': 3000}
+2024-01-18 12:50:28;INFO;Current experimental config: {'run': 11, 'size': 3000}
+2024-01-18 12:51:22;INFO;Current experimental config: {'run': 12, 'size': 3000}
+2024-01-18 12:52:17;INFO;Current experimental config: {'run': 13, 'size': 3000}
+2024-01-18 12:53:11;INFO;Current experimental config: {'run': 14, 'size': 3000}
+2024-01-18 12:54:08;INFO;Current experimental config: {'run': 15, 'size': 3000}
+2024-01-18 12:55:04;INFO;Current experimental config: {'run': 16, 'size': 3000}
+2024-01-18 12:55:59;INFO;Current experimental config: {'run': 17, 'size': 3000}
+2024-01-18 12:56:54;INFO;Current experimental config: {'run': 18, 'size': 3000}
+2024-01-18 12:57:50;INFO;Current experimental config: {'run': 19, 'size': 3000}
+2024-01-18 12:58:42;INFO;Current experimental config: {'run': 20, 'size': 3000}
+2024-01-18 12:59:36;INFO;Current experimental config: {'run': 21, 'size': 3000}
+2024-01-18 13:00:31;INFO;Current experimental config: {'run': 1, 'size': 5000}
+2024-01-18 13:01:24;INFO;Current experimental config: {'run': 2, 'size': 5000}
+2024-01-18 13:02:19;INFO;Current experimental config: {'run': 3, 'size': 5000}
+2024-01-18 13:03:13;INFO;Current experimental config: {'run': 4, 'size': 5000}
+2024-01-18 13:04:06;INFO;Current experimental config: {'run': 5, 'size': 5000}
+2024-01-18 13:05:00;INFO;Current experimental config: {'run': 6, 'size': 5000}
+2024-01-18 13:05:54;INFO;Current experimental config: {'run': 7, 'size': 5000}
+2024-01-18 13:06:48;INFO;Current experimental config: {'run': 8, 'size': 5000}
+2024-01-18 13:07:44;INFO;Current experimental config: {'run': 9, 'size': 5000}
+2024-01-18 13:08:40;INFO;Current experimental config: {'run': 10, 'size': 5000}
+2024-01-18 13:09:34;INFO;Current experimental config: {'run': 11, 'size': 5000}
+2024-01-18 13:10:30;INFO;Current experimental config: {'run': 12, 'size': 5000}
+2024-01-18 13:11:25;INFO;Current experimental config: {'run': 13, 'size': 5000}
+2024-01-18 13:12:19;INFO;Current experimental config: {'run': 14, 'size': 5000}
+2024-01-18 13:13:15;INFO;Current experimental config: {'run': 15, 'size': 5000}
+2024-01-18 13:14:10;INFO;Current experimental config: {'run': 16, 'size': 5000}
+2024-01-18 13:15:06;INFO;Current experimental config: {'run': 17, 'size': 5000}
+2024-01-18 13:16:00;INFO;Current experimental config: {'run': 18, 'size': 5000}
+2024-01-18 13:16:54;INFO;Current experimental config: {'run': 19, 'size': 5000}
+2024-01-18 13:17:47;INFO;Current experimental config: {'run': 20, 'size': 5000}
+2024-01-18 13:18:39;INFO;Current experimental config: {'run': 21, 'size': 5000}
+2024-01-18 13:19:33;INFO;Current experimental config: {'run': 1, 'size': 7000}
+2024-01-18 13:20:27;INFO;Current experimental config: {'run': 2, 'size': 7000}
+2024-01-18 13:21:19;INFO;Current experimental config: {'run': 3, 'size': 7000}
+2024-01-18 13:22:14;INFO;Current experimental config: {'run': 4, 'size': 7000}
+2024-01-18 13:23:09;INFO;Current experimental config: {'run': 5, 'size': 7000}
+2024-01-18 13:24:02;INFO;Current experimental config: {'run': 6, 'size': 7000}
+2024-01-18 13:24:55;INFO;Current experimental config: {'run': 7, 'size': 7000}
+2024-01-18 13:25:48;INFO;Current experimental config: {'run': 8, 'size': 7000}
+2024-01-18 13:26:42;INFO;Current experimental config: {'run': 9, 'size': 7000}
+2024-01-18 13:27:36;INFO;Current experimental config: {'run': 10, 'size': 7000}
+2024-01-18 13:28:30;INFO;Current experimental config: {'run': 11, 'size': 7000}
+2024-01-18 13:29:24;INFO;Current experimental config: {'run': 12, 'size': 7000}
+2024-01-18 13:30:21;INFO;Current experimental config: {'run': 13, 'size': 7000}
+2024-01-18 13:31:15;INFO;Current experimental config: {'run': 14, 'size': 7000}
+2024-01-18 13:32:08;INFO;Current experimental config: {'run': 15, 'size': 7000}
+2024-01-18 13:33:02;INFO;Current experimental config: {'run': 16, 'size': 7000}
+2024-01-18 13:33:56;INFO;Current experimental config: {'run': 17, 'size': 7000}
+2024-01-18 13:34:51;INFO;Current experimental config: {'run': 18, 'size': 7000}
+2024-01-18 13:35:45;INFO;Current experimental config: {'run': 19, 'size': 7000}
+2024-01-18 13:36:41;INFO;Current experimental config: {'run': 20, 'size': 7000}
+2024-01-18 13:37:34;INFO;Current experimental config: {'run': 21, 'size': 7000}
+2024-01-18 13:38:30;INFO;Current experimental config: {'run': 1, 'size': 9000}
+2024-01-18 13:39:24;INFO;Current experimental config: {'run': 2, 'size': 9000}
+2024-01-18 13:40:20;INFO;Current experimental config: {'run': 3, 'size': 9000}
+2024-01-18 13:41:14;INFO;Current experimental config: {'run': 4, 'size': 9000}
+2024-01-18 13:42:08;INFO;Current experimental config: {'run': 5, 'size': 9000}
+2024-01-18 13:43:02;INFO;Current experimental config: {'run': 6, 'size': 9000}
+2024-01-18 13:43:56;INFO;Current experimental config: {'run': 7, 'size': 9000}
+2024-01-18 13:44:51;INFO;Current experimental config: {'run': 8, 'size': 9000}
+2024-01-18 13:45:45;INFO;Current experimental config: {'run': 9, 'size': 9000}
+2024-01-18 13:46:39;INFO;Current experimental config: {'run': 10, 'size': 9000}
+2024-01-18 13:47:33;INFO;Current experimental config: {'run': 11, 'size': 9000}
+2024-01-18 13:48:29;INFO;Current experimental config: {'run': 12, 'size': 9000}
+2024-01-18 13:49:23;INFO;Current experimental config: {'run': 13, 'size': 9000}
+2024-01-18 13:50:17;INFO;Current experimental config: {'run': 14, 'size': 9000}
+2024-01-18 13:51:10;INFO;Current experimental config: {'run': 15, 'size': 9000}
+2024-01-18 13:52:05;INFO;Current experimental config: {'run': 16, 'size': 9000}
+2024-01-18 13:53:04;INFO;Current experimental config: {'run': 17, 'size': 9000}
+2024-01-18 13:53:58;INFO;Current experimental config: {'run': 18, 'size': 9000}
+2024-01-18 13:54:56;INFO;Current experimental config: {'run': 19, 'size': 9000}
+2024-01-18 13:55:51;INFO;Current experimental config: {'run': 20, 'size': 9000}
+2024-01-18 13:56:44;INFO;Current experimental config: {'run': 21, 'size': 9000}
+2024-01-18 13:57:37;INFO;Current experimental config: {'run': 1, 'size': 11000}
+2024-01-18 13:58:32;INFO;Current experimental config: {'run': 2, 'size': 11000}
+2024-01-18 13:59:27;INFO;Current experimental config: {'run': 3, 'size': 11000}
+2024-01-18 14:00:21;INFO;Current experimental config: {'run': 4, 'size': 11000}
+2024-01-18 14:01:16;INFO;Current experimental config: {'run': 5, 'size': 11000}
+2024-01-18 14:02:13;INFO;Current experimental config: {'run': 6, 'size': 11000}
+2024-01-18 14:03:10;INFO;Current experimental config: {'run': 7, 'size': 11000}
+2024-01-18 14:04:05;INFO;Current experimental config: {'run': 8, 'size': 11000}
+2024-01-18 14:04:59;INFO;Current experimental config: {'run': 9, 'size': 11000}
+2024-01-18 14:05:55;INFO;Current experimental config: {'run': 10, 'size': 11000}
+2024-01-18 14:06:50;INFO;Current experimental config: {'run': 11, 'size': 11000}
+2024-01-18 14:07:49;INFO;Current experimental config: {'run': 12, 'size': 11000}
+2024-01-18 14:08:44;INFO;Current experimental config: {'run': 13, 'size': 11000}
+2024-01-18 14:09:39;INFO;Current experimental config: {'run': 14, 'size': 11000}
+2024-01-18 14:10:35;INFO;Current experimental config: {'run': 15, 'size': 11000}
+2024-01-18 14:11:30;INFO;Current experimental config: {'run': 16, 'size': 11000}
+2024-01-18 14:12:23;INFO;Current experimental config: {'run': 17, 'size': 11000}
+2024-01-18 14:13:19;INFO;Current experimental config: {'run': 18, 'size': 11000}
+2024-01-18 14:14:13;INFO;Current experimental config: {'run': 19, 'size': 11000}
+2024-01-18 14:15:08;INFO;Current experimental config: {'run': 20, 'size': 11000}
+2024-01-18 14:16:03;INFO;Current experimental config: {'run': 21, 'size': 11000}
+2024-01-18 14:16:57;INFO;Current experimental config: {'run': 1, 'size': 13000}
+2024-01-18 14:17:53;INFO;Current experimental config: {'run': 2, 'size': 13000}
+2024-01-18 14:18:49;INFO;Current experimental config: {'run': 3, 'size': 13000}
+2024-01-18 14:19:45;INFO;Current experimental config: {'run': 4, 'size': 13000}
+2024-01-18 14:20:42;INFO;Current experimental config: {'run': 5, 'size': 13000}
+2024-01-18 14:21:37;INFO;Current experimental config: {'run': 6, 'size': 13000}
+2024-01-18 14:22:35;INFO;Current experimental config: {'run': 7, 'size': 13000}
+2024-01-18 14:23:31;INFO;Current experimental config: {'run': 8, 'size': 13000}
+2024-01-18 14:24:25;INFO;Current experimental config: {'run': 9, 'size': 13000}
+2024-01-18 14:25:19;INFO;Current experimental config: {'run': 10, 'size': 13000}
+2024-01-18 14:26:16;INFO;Current experimental config: {'run': 11, 'size': 13000}
+2024-01-18 14:27:10;INFO;Current experimental config: {'run': 12, 'size': 13000}
+2024-01-18 14:28:05;INFO;Current experimental config: {'run': 13, 'size': 13000}
+2024-01-18 14:29:09;INFO;Current experimental config: {'run': 14, 'size': 13000}
+2024-01-18 14:30:04;INFO;Current experimental config: {'run': 15, 'size': 13000}
+2024-01-18 14:31:00;INFO;Current experimental config: {'run': 16, 'size': 13000}
+2024-01-18 14:31:56;INFO;Current experimental config: {'run': 17, 'size': 13000}
+2024-01-18 14:32:51;INFO;Current experimental config: {'run': 18, 'size': 13000}
+2024-01-18 14:33:48;INFO;Current experimental config: {'run': 19, 'size': 13000}
+2024-01-18 14:34:46;INFO;Current experimental config: {'run': 20, 'size': 13000}
+2024-01-18 14:35:47;INFO;Current experimental config: {'run': 21, 'size': 13000}
+2024-01-18 14:36:46;INFO;Current experimental config: {'run': 1, 'size': 15000}
+2024-01-18 14:37:44;INFO;Current experimental config: {'run': 2, 'size': 15000}
+2024-01-18 14:38:40;INFO;Current experimental config: {'run': 3, 'size': 15000}
+2024-01-18 14:39:36;INFO;Current experimental config: {'run': 4, 'size': 15000}
+2024-01-18 14:40:32;INFO;Current experimental config: {'run': 5, 'size': 15000}
+2024-01-18 14:41:29;INFO;Current experimental config: {'run': 6, 'size': 15000}
+2024-01-18 14:42:26;INFO;Current experimental config: {'run': 7, 'size': 15000}
+2024-01-18 14:43:21;INFO;Current experimental config: {'run': 8, 'size': 15000}
+2024-01-18 14:44:18;INFO;Current experimental config: {'run': 9, 'size': 15000}
+2024-01-18 14:45:24;INFO;Current experimental config: {'run': 10, 'size': 15000}
+2024-01-18 14:46:26;INFO;Current experimental config: {'run': 11, 'size': 15000}
+2024-01-18 14:47:27;INFO;Current experimental config: {'run': 12, 'size': 15000}
+2024-01-18 14:48:28;INFO;Current experimental config: {'run': 13, 'size': 15000}
+2024-01-18 14:49:32;INFO;Current experimental config: {'run': 14, 'size': 15000}
+2024-01-18 14:50:32;INFO;Current experimental config: {'run': 15, 'size': 15000}
+2024-01-18 14:51:34;INFO;Current experimental config: {'run': 16, 'size': 15000}
+2024-01-18 14:52:34;INFO;Current experimental config: {'run': 17, 'size': 15000}
+2024-01-18 14:53:34;INFO;Current experimental config: {'run': 18, 'size': 15000}
+2024-01-18 14:54:34;INFO;Current experimental config: {'run': 19, 'size': 15000}
+2024-01-18 14:55:33;INFO;Current experimental config: {'run': 20, 'size': 15000}
+2024-01-18 14:56:32;INFO;Current experimental config: {'run': 21, 'size': 15000}
+2024-01-18 14:57:34;INFO;Current experimental config: {'run': 1, 'size': 17000}
+2024-01-18 14:58:36;INFO;Current experimental config: {'run': 2, 'size': 17000}
+2024-01-18 14:59:35;INFO;Current experimental config: {'run': 3, 'size': 17000}
+2024-01-18 15:00:35;INFO;Current experimental config: {'run': 4, 'size': 17000}
+2024-01-18 15:01:37;INFO;Current experimental config: {'run': 5, 'size': 17000}
+2024-01-18 15:02:36;INFO;Current experimental config: {'run': 6, 'size': 17000}
+2024-01-18 15:03:37;INFO;Current experimental config: {'run': 7, 'size': 17000}
+2024-01-18 15:04:38;INFO;Current experimental config: {'run': 8, 'size': 17000}
+2024-01-18 15:05:41;INFO;Current experimental config: {'run': 9, 'size': 17000}
+2024-01-18 15:06:41;INFO;Current experimental config: {'run': 10, 'size': 17000}
+2024-01-18 15:07:44;INFO;Current experimental config: {'run': 11, 'size': 17000}
+2024-01-18 15:08:44;INFO;Current experimental config: {'run': 12, 'size': 17000}
+2024-01-18 15:09:47;INFO;Current experimental config: {'run': 13, 'size': 17000}
+2024-01-18 15:10:50;INFO;Current experimental config: {'run': 14, 'size': 17000}
+2024-01-18 15:11:52;INFO;Current experimental config: {'run': 15, 'size': 17000}
+2024-01-18 15:12:52;INFO;Current experimental config: {'run': 16, 'size': 17000}
+2024-01-18 15:13:53;INFO;Current experimental config: {'run': 17, 'size': 17000}
+2024-01-18 15:14:53;INFO;Current experimental config: {'run': 18, 'size': 17000}
+2024-01-18 15:15:53;INFO;Current experimental config: {'run': 19, 'size': 17000}
+2024-01-18 15:16:53;INFO;Current experimental config: {'run': 20, 'size': 17000}
+2024-01-18 15:17:53;INFO;Current experimental config: {'run': 21, 'size': 17000}
+2024-01-18 15:18:50;INFO;Current experimental config: {'run': 1, 'size': 19000}
+2024-01-18 15:19:47;INFO;Current experimental config: {'run': 2, 'size': 19000}
+2024-01-18 15:20:44;INFO;Current experimental config: {'run': 3, 'size': 19000}
+2024-01-18 15:21:41;INFO;Current experimental config: {'run': 4, 'size': 19000}
+2024-01-18 15:22:39;INFO;Current experimental config: {'run': 5, 'size': 19000}
+2024-01-18 15:23:36;INFO;Current experimental config: {'run': 6, 'size': 19000}
+2024-01-18 15:24:36;INFO;Current experimental config: {'run': 7, 'size': 19000}
+2024-01-18 15:25:33;INFO;Current experimental config: {'run': 8, 'size': 19000}
+2024-01-18 15:26:33;INFO;Current experimental config: {'run': 9, 'size': 19000}
+2024-01-18 15:27:35;INFO;Current experimental config: {'run': 10, 'size': 19000}
+2024-01-18 15:28:32;INFO;Current experimental config: {'run': 11, 'size': 19000}
+2024-01-18 15:29:28;INFO;Current experimental config: {'run': 12, 'size': 19000}
+2024-01-18 15:30:26;INFO;Current experimental config: {'run': 13, 'size': 19000}
+2024-01-18 15:31:25;INFO;Current experimental config: {'run': 14, 'size': 19000}
+2024-01-18 15:32:23;INFO;Current experimental config: {'run': 15, 'size': 19000}
+2024-01-18 15:33:22;INFO;Current experimental config: {'run': 16, 'size': 19000}
+2024-01-18 15:34:22;INFO;Current experimental config: {'run': 17, 'size': 19000}
+2024-01-18 15:35:19;INFO;Current experimental config: {'run': 18, 'size': 19000}
+2024-01-18 15:36:15;INFO;Current experimental config: {'run': 19, 'size': 19000}
+2024-01-18 15:37:13;INFO;Current experimental config: {'run': 20, 'size': 19000}
+2024-01-18 15:38:10;INFO;Current experimental config: {'run': 21, 'size': 19000}
+2024-01-18 15:39:09;INFO;Current experimental config: {'run': 1, 'size': 21000}
+2024-01-18 15:40:06;INFO;Current experimental config: {'run': 2, 'size': 21000}
+2024-01-18 15:41:04;INFO;Current experimental config: {'run': 3, 'size': 21000}
+2024-01-18 15:42:04;INFO;Current experimental config: {'run': 4, 'size': 21000}
+2024-01-18 15:43:03;INFO;Current experimental config: {'run': 5, 'size': 21000}
+2024-01-18 15:44:01;INFO;Current experimental config: {'run': 6, 'size': 21000}
+2024-01-18 15:45:00;INFO;Current experimental config: {'run': 7, 'size': 21000}
+2024-01-18 15:46:00;INFO;Current experimental config: {'run': 8, 'size': 21000}
+2024-01-18 15:46:59;INFO;Current experimental config: {'run': 9, 'size': 21000}
+2024-01-18 15:48:00;INFO;Current experimental config: {'run': 10, 'size': 21000}
+2024-01-18 15:48:59;INFO;Current experimental config: {'run': 11, 'size': 21000}
+2024-01-18 15:49:59;INFO;Current experimental config: {'run': 12, 'size': 21000}
+2024-01-18 15:50:58;INFO;Current experimental config: {'run': 13, 'size': 21000}
+2024-01-18 15:51:56;INFO;Current experimental config: {'run': 14, 'size': 21000}
+2024-01-18 15:52:54;INFO;Current experimental config: {'run': 15, 'size': 21000}
+2024-01-18 15:53:53;INFO;Current experimental config: {'run': 16, 'size': 21000}
+2024-01-18 15:54:52;INFO;Current experimental config: {'run': 17, 'size': 21000}
+2024-01-18 15:55:50;INFO;Current experimental config: {'run': 18, 'size': 21000}
+2024-01-18 15:56:49;INFO;Current experimental config: {'run': 19, 'size': 21000}
+2024-01-18 15:57:49;INFO;Current experimental config: {'run': 20, 'size': 21000}
+2024-01-18 15:58:48;INFO;Current experimental config: {'run': 21, 'size': 21000}
+2024-01-18 15:59:49;INFO;Writing results to C:\Users\Traitor\Documents\GitHub\turnstile-sampling\experimental-results\covertype_sklearn_turnstile.csv
+2024-01-18 15:59:49;INFO;Done.

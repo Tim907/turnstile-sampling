@@ -399,11 +399,12 @@ class TurnstileSamplingExperiment(BaseExperiment):
         a_i_mat = a_i_j[np.arange(n), :, ind]
 
         # filter out unimportant samples
-        # outlier = np.zeros((n, s))
-        # for j in range(s):
-        #     outlier[:, j] = np.linalg.norm(a_i_j[np.arange(n), :, ind] - a_i_j[:, :, j], ord=p, axis=1) > 1 / 4 * v_i
-        # v_i[np.sum(outlier, axis=1) >= s // 2] = 0
-        # print(pd.Series(np.sum(outlier, axis=1)).value_counts())
+        number_filtered = 2 * k
+        index_of_largest = np.argsort(-v_i)[0:number_filtered]
+        outlier = np.zeros((number_filtered, s))
+        for j in range(s):
+            outlier[:, j] = np.linalg.norm(a_i_j[index_of_largest, :, ind[index_of_largest]] - a_i_j[index_of_largest, :, j], ord=p, axis=1) > 1 / 4 * v_i[index_of_largest]
+        v_i[index_of_largest[np.sum(outlier, axis=1) >= s // 2]] = 0
 
         # Test equality of implementation
         # print(np.isclose(v_i, v_i_old).all())
