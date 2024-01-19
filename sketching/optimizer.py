@@ -154,7 +154,7 @@ class base_optimizer:
 
 
 class L1_optimizer(base_optimizer):
-    """optimizer for L1 optimization used in cauchy-sketch"""
+    """optimizer for L1 optimization"""
     def optimize(self, reduced_matrix, weights=None):
         return optimize_L1(reduced_matrix).x
 
