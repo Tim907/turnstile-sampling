@@ -1,7 +1,11 @@
+import logging
+
 import numpy as np
 import scipy.optimize as so
 from numba import jit
 from sklearn.linear_model import SGDClassifier
+from scipy.optimize import fmin_l_bfgs_b
+from sklearn.linear_model import LogisticRegression
 
 
 def only_keep_k(vec, block_size, k, max_len=None, biggest=True):
@@ -92,12 +96,12 @@ def logistic_likelihood_grad(
 
 
 def L1_objective(theta, X, y):
-    """L1 loss function used in cauchy-sketching"""
+    """L1 loss function"""
     return np.sum(np.abs(X.dot(theta) - y))
 
 def L1_grad(theta, X, y):
-    """L1 gradient function used in cauchy-sketching"""
-    return sum(np.multiply(X, np.sign(X.dot(theta) - y)[:, np.newaxis]))
+    """L1 gradient function"""
+    return np.sum(np.multiply(X, np.sign(X.dot(theta) - y)[:, np.newaxis]), axis=0)
 
 
 def optimize(Z, w=None, block_size=None, k=None, max_len=None):
@@ -113,7 +117,11 @@ def optimize(Z, w=None, block_size=None, k=None, max_len=None):
 
     theta0 = np.zeros(Z.shape[1])
 
-    return so.minimize(objective_function, theta0, method="L-BFGS-B", jac=gradient)
+    res = so.minimize(objective_function, theta0, method="L-BFGS-B", jac=gradient)
+    if res.success is False:
+        print("Optimization not successful.")
+        print(res)
+    return res
 
 
 def optimize_L1(Z):
@@ -130,7 +138,17 @@ def optimize_L1(Z):
 
     theta0 = np.zeros(X.shape[1])
 
-    return so.minimize(objective_function, theta0, method="L-BFGS-B", jac=gradient)
+    # results = []
+    # for method in ['nelder-mead', 'powell', 'cg', 'bfgs', 'newton-cg',
+    #                 'l-bfgs-b', 'tnc', 'cobyla', 'slsqp', 'trust-constr']:
+    #     results.append(so.minimize(objective_function, theta0, method=method, jac=gradient))
+
+    theta0 = np.random.uniform(size = X.shape[1])
+    res = so.minimize(objective_function, theta0, method="L-BFGS-B", jac=gradient)
+    if res.success is False:
+        print("Optimization not successful.")
+        print(res)
+    return res
 
 
 class base_optimizer:
@@ -138,6 +156,10 @@ class base_optimizer:
 
     def __init__(self) -> None:
         return
+
+    def get_name(self):
+        return "logistic"
+
     def setDataset(self, X, y, Z):
         self.X = X
         self.y = y
@@ -155,6 +177,10 @@ class base_optimizer:
 
 class L1_optimizer(base_optimizer):
     """optimizer for L1 optimization"""
+
+    def get_name(self):
+        return "L1"
+
     def optimize(self, reduced_matrix, weights=None):
         return optimize_L1(reduced_matrix).x
 

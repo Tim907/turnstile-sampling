@@ -65,8 +65,8 @@ def run_experiments(dataset: Dataset, min_size, max_size, step_size, num_runs, a
         max_size=max_size,
         step_size=step_size,
         num_runs=num_runs,
-        optimizer=optimizer.base_optimizer(),
+        optimizer=optimizer.L1_optimizer(),
         factor_unif=0.2
     )
-    experiment_sketching.run(parallel=True, n_jobs=4, add=add)
+    experiment_sketching.run(parallel=True, n_jobs=3, add=add)
 

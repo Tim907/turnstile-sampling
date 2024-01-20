@@ -17,7 +17,7 @@ MAX_SIZE = 40000
 STEP_SIZE = 1000
 NUM_RUNS = 21
 
-dataset = KDDCup_Sklearn(use_caching=False)
+dataset = KDDCup_Sklearn(use_caching=True)
 
 run_experiments(
     dataset=dataset,

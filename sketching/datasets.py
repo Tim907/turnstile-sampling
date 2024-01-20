@@ -85,7 +85,7 @@ class Dataset(abc.ABC):
             logger.info("Done.")
             return beta_opt
 
-        beta_opt_path = self.get_binary_path_beta_opt()
+        beta_opt_path = self.get_binary_path_beta_opt(base_optimizer)
         if beta_opt_path.exists():
             logger.info(
                 f"Loading cached version of beta_opt found at {beta_opt_path}..."
@@ -99,6 +99,7 @@ class Dataset(abc.ABC):
         beta_opt = base_optimizer.optimize(Z)
         logger.info("Done.")
         np.save(beta_opt_path, beta_opt)
+        logger.info("beta_opt is: ", beta_opt)
         logger.info(f"Saved beta_opt at {beta_opt_path}.")
 
         return beta_opt
@@ -113,8 +114,8 @@ class Dataset(abc.ABC):
     def get_binary_path_y(self) -> Path:
         return self.cache_dir / f"{self.get_name()}_y.npy"
 
-    def get_binary_path_beta_opt(self) -> Path:
-        return self.cache_dir / f"{self.get_name()}_beta_opt.npy"
+    def get_binary_path_beta_opt(self, base_optimizer: optimizer.base_optimizer) -> Path:
+        return self.cache_dir / f"{self.get_name()}_beta_opt_{base_optimizer.get_name()}.npy"
 
     def get_X(self):
         self._assert_data_loaded()
