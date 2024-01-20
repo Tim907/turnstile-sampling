@@ -78,14 +78,17 @@ class Dataset(abc.ABC):
         return X, y
 
     def _get_beta_opt_cached(self, base_optimizer: optimizer.base_optimizer):
+        
+        beta_opt_path = self.get_binary_path_beta_opt(base_optimizer)
         if not self.use_caching:
             Z = base_optimizer.get_Z()
             logger.info("Computing beta_opt...")
             beta_opt = base_optimizer.optimize(Z)
             logger.info("Done.")
+            np.save(beta_opt_path, beta_opt)
+            logger.info(f"Saved beta_opt at {beta_opt_path}.")
             return beta_opt
 
-        beta_opt_path = self.get_binary_path_beta_opt(base_optimizer)
         if beta_opt_path.exists():
             logger.info(
                 f"Loading cached version of beta_opt found at {beta_opt_path}..."

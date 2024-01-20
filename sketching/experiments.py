@@ -542,8 +542,9 @@ class LeverageScoreSamplingExperiment(BaseExperiment):
         leverage_scores = leverage_scores + 1 / Z.shape[0]
 
         # calculate probabilities
-        p = leverage_scores / np.sum(leverage_scores)
-        w = 1 / (p * size)
-        sample_indices = np.random.choice(Z.shape[0], size=size, replace=False, p=p)
+        prob = leverage_scores / np.sum(leverage_scores)
+        weights = 1 / (prob * size)
+        weights[weights < 1] = 1
+        sample_indices = np.random.choice(Z.shape[0], size=size, replace=False, p=prob)
 
-        return Z[sample_indices, :], w[sample_indices]
+        return Z[sample_indices, :], weights[sample_indices]
