@@ -79,6 +79,7 @@ class BaseExperiment(abc.ABC):
         Z = self.dataset.get_Z()
 
         beta_opt = self.dataset.get_beta_opt(self.optimizer)
+        logger.info("beta_opt", beta_opt)
         objective_function = self.optimizer.get_objective_function()
         f_opt = objective_function(beta_opt)
 

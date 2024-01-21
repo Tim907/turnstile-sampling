@@ -3,6 +3,7 @@ import logging
 import numpy as np
 import scipy.optimize as so
 from numba import jit
+from pygments.formatters.html import webify
 from sklearn.linear_model import SGDClassifier
 from scipy.optimize import fmin_l_bfgs_b
 from sklearn.linear_model import LogisticRegression
@@ -124,10 +125,13 @@ def optimize(Z, w=None, block_size=None, k=None, max_len=None):
     return res
 
 
-def optimize_L1(Z):
+def optimize_L1(Z, w=None):
     """Optimizes by L1 loss according to Theorem 1 of the paper."""
 
-    X = Z[:, 0:(Z.shape[1]-1)]
+    if w is not None:
+        Z = w[:, np.newaxis] * Z
+
+    X = Z[:, 0:(Z.shape[1] - 1)]
     y = Z[:, -1]
 
     def objective_function(theta):
@@ -138,16 +142,15 @@ def optimize_L1(Z):
 
     theta0 = np.zeros(X.shape[1])
 
-    # results = []
-    # for method in ['nelder-mead', 'powell', 'cg', 'bfgs', 'newton-cg',
-    #                 'l-bfgs-b', 'tnc', 'cobyla', 'slsqp', 'trust-constr']:
-    #     results.append(so.minimize(objective_function, theta0, method=method, jac=gradient))
-
-    theta0 = np.random.uniform(size = X.shape[1])
     res = so.minimize(objective_function, theta0, method="L-BFGS-B", jac=gradient)
+    #res2 = so.minimize(objective_function, theta0, method="nelder-mead", options={"maxiter": 5000 * X.shape[1]})
+    #res3 = so.minimize(objective_function, theta0, method="powell", options={"maxiter": 5000 * X.shape[1]})
+    print(res)
     if res.success is False:
         print("Optimization not successful.")
         print(res)
+    if res.nit <= 2:
+        print("Very few iterations in optimization!")
     return res
 
 
@@ -182,7 +185,7 @@ class L1_optimizer(base_optimizer):
         return "L1"
 
     def optimize(self, reduced_matrix, weights=None):
-        return optimize_L1(reduced_matrix).x
+        return optimize_L1(reduced_matrix, w=weights).x
 
     def get_objective_function(self):
         Z = self.get_Z()

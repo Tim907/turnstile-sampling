@@ -15,7 +15,7 @@ logistic likelihood, variance-regularized logistic likelihood, L1-optimization a
 MIN_SIZE = 10000
 MAX_SIZE = 40000
 STEP_SIZE = 1000
-NUM_RUNS = 5
+NUM_RUNS = 21
 
 dataset = KDDCup_Sklearn(use_caching=False)
 
