@@ -233,7 +233,7 @@ class Covertype_Sklearn(Dataset):
         X_continuous = df[self.features_continuous].to_numpy()
         X_continuous = scale(X_continuous)
 
-        features_binary = list(set(df.columns) - set(self.features_continuous))
+        features_binary = sorted(set(df.columns) - set(self.features_continuous))
         X_binary = df[features_binary].to_numpy()
 
         # put binary features and scaled features back together

@@ -55,7 +55,7 @@ def run_experiments(dataset: Dataset, min_size, max_size, step_size, num_runs, a
         num_runs=num_runs,
         optimizer=optimizer.L1_optimizer(),
     )
-    experiment_leverage.run(parallel=False, n_jobs=4, add=add)
+    #experiment_leverage.run(parallel=True, n_jobs=4, add=add)
 
     logger.info("Starting turnstile experiment")
     experiment_sketching = TurnstileSamplingExperiment(
@@ -68,5 +68,21 @@ def run_experiments(dataset: Dataset, min_size, max_size, step_size, num_runs, a
         optimizer=optimizer.L1_optimizer(),
         factor_unif=0.2
     )
-    #experiment_sketching.run(parallel=True, n_jobs=3, add=add)
+    #experiment_sketching.run(parallel=True, n_jobs=4, add=add)
+
+    logger.info("Starting sketching experiment")
+    experiment_sketching = ObliviousSketchingExperiment(
+        dataset=dataset,
+        results_filename=settings.RESULTS_DIR / f"{dataset.get_name()}_cosketching2.csv",
+        min_size=min_size,
+        max_size=max_size,
+        step_size=step_size,
+        num_runs=num_runs,
+        h_max=1,
+        kyfan_percent=1,
+        sketchratio=1/3,
+        cohensketch=2,
+        optimizer=optimizer.L1_optimizer()
+    )
+    experiment_sketching.run(parallel=True, n_jobs=4, add=add)
 

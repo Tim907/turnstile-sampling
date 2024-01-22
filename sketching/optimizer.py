@@ -3,6 +3,7 @@ import logging
 import numpy as np
 import scipy.optimize as so
 from numba import jit
+from . import settings
 from pygments.formatters.html import webify
 from sklearn.linear_model import SGDClassifier
 from scipy.optimize import fmin_l_bfgs_b
@@ -172,7 +173,7 @@ class base_optimizer:
         return self.Z
 
     def optimize(self, reduced_matrix, weights=None):
-        return optimize(Z = reduced_matrix, w = weights).x
+        return optimize(Z=reduced_matrix, w=weights).x
 
     def get_objective_function(self):
         return lambda theta: logistic_likelihood(theta, self.Z)
@@ -192,4 +193,5 @@ class L1_optimizer(base_optimizer):
         return lambda theta: L1_objective(theta, X=Z[:, 0:(Z.shape[1]-1)], y=Z[:, -1])
 
     def get_Z(self):
+        # last column gets label unlike in logistic optimizer
         return np.append(np.append(self.X, np.ones(shape=(self.X.shape[0], 1)), axis=1), self.y[:, np.newaxis], axis=1)
