@@ -55,7 +55,7 @@ def run_experiments(dataset: Dataset, min_size, max_size, step_size, num_runs, a
         num_runs=num_runs,
         optimizer=optimizer.L1_optimizer(),
     )
-    experiment_leverage.run(parallel=True, n_jobs=3, add=add)
+    experiment_leverage.run(parallel=False, n_jobs=3, add=add)
 
     logger.info("Starting turnstile experiment")
     experiment_sketching = TurnstileSamplingExperiment(

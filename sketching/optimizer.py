@@ -3,10 +3,9 @@ import logging
 import numpy as np
 import scipy.optimize as so
 from numba import jit
+from scipy.optimize import fmin_l_bfgs_b, linprog
 from . import settings
-from pygments.formatters.html import webify
 from sklearn.linear_model import SGDClassifier
-from scipy.optimize import fmin_l_bfgs_b
 from sklearn.linear_model import LogisticRegression
 
 
@@ -155,6 +154,41 @@ def optimize_L1(Z, w=None):
     return res
 
 
+def optimize_L1_LP(Z, w=None):
+    if w is not None:
+        Z = w[:, np.newaxis] * Z
+
+    # Z = Z[0:100, :]
+    # test = optimize_L1(Z, w)
+
+    X = Z[:, 0:(Z.shape[1] - 1)]
+    y = Z[:, -1]
+
+    n, d = X.shape
+
+    # Coefficients for the decision variables (beta, epsilon)
+    c = np.concatenate((np.zeros(d), np.ones(n)))
+
+    # Inequality constraints: (beta^T * X) - epsilon <= y
+    A_ub = np.hstack((X, np.diag(-np.ones(n))))
+    b_ub = y
+
+    # Inequality constraints: -(beta^T * X) - epsilon <= -y
+    A_ub2 = np.hstack((-X, np.diag(-np.ones(n))))
+    b_ub2 = -y
+
+    # Bounds for beta, beta0, and epsilon
+    bounds = [(None, None)] * d + [(0, None)] * n
+
+    # Solve the linear program
+    result = linprog(c, A_ub=np.vstack((A_ub, A_ub2)), b_ub=np.hstack((b_ub, b_ub2)), bounds=bounds, method='highs')
+
+    # Extract the solution
+    beta = result.x[:d]
+    return beta
+
+
+
 class base_optimizer:
     """optimizer for logistic regression"""
 
@@ -187,6 +221,25 @@ class L1_optimizer(base_optimizer):
 
     def optimize(self, reduced_matrix, weights=None):
         return optimize_L1(reduced_matrix, w=weights).x
+
+    def get_objective_function(self):
+        Z = self.get_Z()
+        return lambda theta: L1_objective(theta, X=Z[:, 0:(Z.shape[1]-1)], y=Z[:, -1])
+
+    def get_Z(self):
+        # last column gets label unlike in logistic optimizer
+        return np.append(np.append(self.X, np.ones(shape=(self.X.shape[0], 1)), axis=1), self.y[:, np.newaxis], axis=1)
+
+
+class L1_linear_program_optimizer(base_optimizer):
+    """optimizer for L1 optimization"""
+
+    def get_name(self):
+        return "L1_LP"
+
+    def optimize(self, reduced_matrix, weights=None):
+        return optimize_L1_LP(reduced_matrix, w=weights)
+
 
     def get_objective_function(self):
         Z = self.get_Z()
