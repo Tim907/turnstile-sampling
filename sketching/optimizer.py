@@ -2,8 +2,9 @@ import logging
 
 import numpy as np
 import scipy.optimize as so
+import scipy.sparse as spa
 from numba import jit
-from scipy.optimize import fmin_l_bfgs_b, linprog
+from pyomo.environ import *
 from . import settings
 from sklearn.linear_model import SGDClassifier
 from sklearn.linear_model import LogisticRegression
@@ -158,7 +159,7 @@ def optimize_L1_LP(Z, w=None):
     if w is not None:
         Z = w[:, np.newaxis] * Z
 
-    # Z = Z[0:100, :]
+    # Z = Z[0:1000, :]
     # test = optimize_L1(Z, w)
 
     X = Z[:, 0:(Z.shape[1] - 1)]
@@ -169,19 +170,20 @@ def optimize_L1_LP(Z, w=None):
     # Coefficients for the decision variables (beta, epsilon)
     c = np.concatenate((np.zeros(d), np.ones(n)))
 
+
     # Inequality constraints: (beta^T * X) - epsilon <= y
-    A_ub = np.hstack((X, np.diag(-np.ones(n))))
+    A_ub = spa.hstack([spa.csr_matrix(X), spa.diags(-np.ones(n))])
     b_ub = y
 
     # Inequality constraints: -(beta^T * X) - epsilon <= -y
-    A_ub2 = np.hstack((-X, np.diag(-np.ones(n))))
+    A_ub2 = spa.hstack([spa.csr_matrix(-X), spa.diags(-np.ones(n))])
     b_ub2 = -y
 
     # Bounds for beta, beta0, and epsilon
     bounds = [(None, None)] * d + [(0, None)] * n
 
     # Solve the linear program
-    result = linprog(c, A_ub=np.vstack((A_ub, A_ub2)), b_ub=np.hstack((b_ub, b_ub2)), bounds=bounds, method='highs')
+    result = so.linprog(c, A_ub=spa.vstack((A_ub, A_ub2)), b_ub=np.hstack((b_ub, b_ub2)), bounds=bounds, options={"sparse": True, "disp": True, "sym_pos": False})
 
     # Extract the solution
     beta = result.x[:d]
