@@ -119,7 +119,7 @@ def optimize(Z, w=None, block_size=None, k=None, max_len=None):
 
     theta0 = np.zeros(Z.shape[1])
 
-    res = so.minimize(objective_function, theta0, method="L-BFGS-B", jac=gradient)
+    res = so.minimize(objective_function, theta0, method="L-BFGS-B", jac=gradient, options={'gtol': 1e-09, 'ftol': 1e-20})
     if res.success is False:
         print("Optimization not successful.")
         print(res)
@@ -143,15 +143,20 @@ def optimize_L1(Z, w=None):
 
     theta0 = np.zeros(X.shape[1])
 
-    res = so.minimize(objective_function, theta0, method="L-BFGS-B", jac=gradient)
-    #res2 = so.minimize(objective_function, theta0, method="nelder-mead", options={"maxiter": 5000 * X.shape[1]})
-    #res3 = so.minimize(objective_function, theta0, method="powell", options={"maxiter": 5000 * X.shape[1]})
+    res = so.minimize(objective_function, theta0, method="L-BFGS-B", jac=gradient, options={'gtol': 1e-09, 'ftol': 1e-20})
     print(res)
     if res.success is False:
         print("Optimization not successful.")
-        print(res)
+        print(res.message)
     if res.nit <= 2:
         print("Very few iterations in optimization!")
+
+    # theta_opt = [res.x]
+    # s = 0.2 / np.linalg.norm(gradient(theta_opt[0]), ord=2)
+    # for i in range(1000):
+    #     print(objective_function(theta_opt[i]))
+    #     theta_opt.append(theta_opt[i] - s * gradient(theta_opt[i]) / np.sqrt(i+1))
+
     return res
 
 
