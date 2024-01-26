@@ -536,8 +536,10 @@ class LeverageScoreSamplingExperiment(BaseExperiment):
         size = config["size"]
 
         leverage_scores = self.compute_leverage_scores(Z, p=1, fast_approx=True)
+
+        leverage_scores = leverage_scores / np.sum(leverage_scores)
         # augmented
-        leverage_scores = leverage_scores + 1 / Z.shape[0]
+        leverage_scores = leverage_scores + 0.2 / Z.shape[0]
 
         # calculate probabilities
         prob = leverage_scores / np.sum(leverage_scores)
