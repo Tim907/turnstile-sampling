@@ -119,7 +119,7 @@ def optimize(Z, w=None, block_size=None, k=None, max_len=None):
 
     theta0 = np.zeros(Z.shape[1])
 
-    res = so.minimize(objective_function, theta0, method="L-BFGS-B", jac=gradient, options={'gtol': 1e-09, 'ftol': 1e-20, 'maxls': 50})
+    res = so.minimize(objective_function, theta0, method="L-BFGS-B", jac=gradient, options={'gtol': 1e-09, 'ftol': 1e-20, 'maxls': 50, 'maxfun': 30000, 'maxiter': 30000})
     if res.success is False:
         print("Optimization not successful.")
         print(res)
@@ -143,7 +143,7 @@ def optimize_L1(Z, w=None):
 
     theta0 = np.zeros(X.shape[1])
 
-    res = so.minimize(objective_function, theta0, method="L-BFGS-B", jac=gradient, options={'gtol': 1e-09, 'ftol': 1e-20, 'maxls': 50})
+    res = so.minimize(objective_function, theta0, method="L-BFGS-B", jac=gradient, options={'gtol': 1e-09, 'ftol': 1e-20, 'maxls': 50, 'maxfun': 30000, 'maxiter': 30000})
     print(res)
     if res.success is False:
         print("Optimization not successful.")
