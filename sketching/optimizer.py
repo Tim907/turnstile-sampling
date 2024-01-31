@@ -121,8 +121,7 @@ def optimize(Z, w=None, block_size=None, k=None, max_len=None):
 
     res = so.minimize(objective_function, theta0, method="L-BFGS-B", jac=gradient, options={'gtol': 1e-09, 'ftol': 1e-20, 'maxls': 50, 'maxfun': 30000, 'maxiter': 30000})
     if res.success is False:
-        print("Optimization not successful.")
-        print(res)
+        print(f"Optimization not successful: {res.message}")
     return res
 
 
@@ -146,8 +145,7 @@ def optimize_L1(Z, w=None):
     res = so.minimize(objective_function, theta0, method="L-BFGS-B", jac=gradient, options={'gtol': 1e-09, 'ftol': 1e-20, 'maxls': 50, 'maxfun': 30000, 'maxiter': 30000})
     print(res)
     if res.success is False:
-        print("Optimization not successful.")
-        print(res.message)
+        print(f"Optimization not successful: {res.message}")
     if res.nit <= 2:
         print("Very few iterations in optimization!")
     # res2 = so.minimize(objective_function, theta0, method="L-BFGS-B", jac=gradient, options={'gtol': 1e-09, 'ftol': 1e-20, 'maxls': 50, 'disp': 10})

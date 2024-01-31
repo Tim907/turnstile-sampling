@@ -45,17 +45,6 @@ def run_experiments(dataset: Dataset, min_size, max_size, step_size, num_runs, a
     if not settings.RESULTS_DIR.exists():
         settings.RESULTS_DIR.mkdir()
 
-    # logger.info("Starting leverage sampling experiment")
-    experiment_leverage = LeverageScoreSamplingExperiment(
-        dataset=dataset,
-        results_filename=settings.RESULTS_DIR / f"{dataset.get_name()}_leverage.csv",
-        min_size=min_size,
-        max_size=max_size,
-        step_size=step_size,
-        num_runs=num_runs,
-        optimizer=optimizer.L1_optimizer(),
-    )
-    #experiment_leverage.run(parallel=True, n_jobs=3, add=add)
 
     logger.info("Starting turnstile experiment")
     experiment_sketching = TurnstileSamplingExperiment(
@@ -65,10 +54,22 @@ def run_experiments(dataset: Dataset, min_size, max_size, step_size, num_runs, a
         max_size=max_size,
         step_size=step_size,
         num_runs=num_runs,
-        optimizer=optimizer.L1_optimizer(),
+        optimizer=optimizer.base_optimizer(),
         factor_unif=0.2
     )
-    #experiment_sketching.run(parallel=True, n_jobs=3, add=add)
+    experiment_sketching.run(parallel=True, n_jobs=3, add=add)
+
+    logger.info("Starting leverage sampling experiment")
+    experiment_leverage = LeverageScoreSamplingExperiment(
+        dataset=dataset,
+        results_filename=settings.RESULTS_DIR / f"{dataset.get_name()}_leverage.csv",
+        min_size=min_size,
+        max_size=max_size,
+        step_size=step_size,
+        num_runs=num_runs,
+        optimizer=optimizer.base_optimizer(),
+    )
+    experiment_leverage.run(parallel=True, n_jobs=3, add=add)
 
     logger.info("Starting sketching experiment")
     experiment_sketching = ObliviousSketchingExperiment(
@@ -82,7 +83,7 @@ def run_experiments(dataset: Dataset, min_size, max_size, step_size, num_runs, a
         kyfan_percent=1,
         sketchratio=1/3,
         cohensketch=2,
-        optimizer=optimizer.L1_optimizer()
+        optimizer=optimizer.base_optimizer()
     )
     experiment_sketching.run(parallel=True, n_jobs=3, add=add)
 
