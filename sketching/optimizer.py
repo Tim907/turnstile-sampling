@@ -4,10 +4,6 @@ import numpy as np
 import scipy.optimize as so
 import scipy.sparse as spa
 from numba import jit
-from pyomo.environ import *
-from . import settings
-from sklearn.linear_model import SGDClassifier
-from sklearn.linear_model import LogisticRegression
 
 
 def only_keep_k(vec, block_size, k, max_len=None, biggest=True):
