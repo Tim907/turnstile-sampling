@@ -94,6 +94,7 @@ class BaseExperiment(abc.ABC):
             total_time = perf_counter() - start_time
 
             cur_ratio = objective_function(cur_beta_opt) / f_opt
+            print("Ratio ", cur_ratio)
             return {
                 **cur_config,
                 "ratio": cur_ratio,
@@ -302,7 +303,8 @@ class TurnstileSamplingExperiment(BaseExperiment):
             step_size,
             num_runs,
             optimizer: optimizer.base_optimizer,
-            factor_unif
+            factor_unif,
+            p
     ):
         super().__init__(
             num_runs=num_runs,
@@ -314,6 +316,7 @@ class TurnstileSamplingExperiment(BaseExperiment):
             optimizer=optimizer,
         )
         self.factor_unif = factor_unif
+        self.p = p
 
 
     def get_reduced_matrix_and_weights(self, config):
@@ -327,7 +330,7 @@ class TurnstileSamplingExperiment(BaseExperiment):
         k = config["size"] - k_unif  # remaining samples of the sketch
         size = round( k * max(30, np.log(n) ) )
         s = 2 * round( max(5, np.log(n)/2 ) ) + 1
-        p = 1
+        p = self.p
 
         print("Unif: "+str(self.factor_unif))
         print("Size (r): "+str(size))
@@ -355,17 +358,22 @@ class TurnstileSamplingExperiment(BaseExperiment):
         # turnstile stream updates for Algo 3
         f = np.random.randint((d ** 2), size=n)
         g = (np.random.randint(2, size=n) * 2 - 1) # * d
-        lamb = expon.rvs(size=n)
         #f2 = np.random.randint(d ** 2, size=n)
         #g2 = np.random.standard_cauchy(n) / np.log(d)
-        Z_ = np.zeros(((d**2),d))
+        Z_ = np.zeros(((d**2), d))
         
         # QR decomposition for Algo3
         #for i in range(n):
         #    Z_[f[i]] += g[i] * Z[i, :] # Pi1*Z
         #    Z_[(d ** 2) + f2[i]] += g2[i] * Z[i, :] # Pi2*Z
-        for i in range(n):
-            Z_[f[i]] += g[i] * Z[i, :] / np.power(lamb[1],1/p) # Pi*Z
+        if p == 2:
+            for i in range(n):
+                Z_[f[i]] += g[i] * Z[i, :]
+        else:
+            lamb = expon.rvs(size=n)
+            for i in range(n):
+                Z_[f[i]] += g[i] * Z[i, :] / np.power(lamb[i], 1/p) # Pi*Z
+
         R_ = np.linalg.qr(Z_, mode="r")
         R_inv = np.linalg.pinv(R_)
         
@@ -442,18 +450,111 @@ class TurnstileSamplingExperiment(BaseExperiment):
         # print(np.sum(weights))
         return reduced_matrix, weights
 
-    def optimize(self, reduced_matrix, weights):
-        return optimizer.optimize(
-            reduced_matrix,
-            weights,
-            block_size=self.cur_kyfan_block_size,
-            k=self.cur_kyfan_k,
-            max_len=self.cur_kyfan_max_len,
-        ).x
 
 
+def fast_QR(X, p=1):
+    """
+    Returns Q of a fast QR decomposition of X.
+    """
+    n, d = X.shape
+
+    if p <= 2:
+        sketch_size = d ** 2
+    else:
+        sketch_size = np.maximum(d ** 2, int(np.power(n, 1 - 2 / p)))
+
+    f = np.random.randint(sketch_size, size=n)
+    g = np.random.randint(2, size=n) * 2 - 1
+    if p != 2:
+        lamb = expon.rvs(size=n)
+
+    # init the sketch
+    X_sketch = np.zeros((sketch_size, d))
+    if p == 2:
+        for i in range(n):
+            X_sketch[f[i]] += g[i] * X[i]
+    else:
+        for i in range(n):
+            X_sketch[f[i]] += g[i] / np.power(lamb[i], 1 / p) * X[i]  # exponential distributed random variable
+
+    R = np.linalg.qr(X_sketch, mode="r")
+    R_inv = np.linalg.inv(R)
+
+    if p == 2:
+        k = 20
+        g = np.random.normal(loc=0, scale=1 / np.sqrt(k), size=(R_inv.shape[1], k))
+        r = np.dot(R_inv, g)
+        Q = np.dot(X, r)
+    else:
+        Q = np.dot(X, R_inv)
+    return Q
+
+def compute_leverage_scores(X: np.ndarray, p, fast_approx):
+    """
+        Computes leverage scores.
+    """
+    if not len(X.shape) == 2:
+        raise ValueError("X must be 2D!")
+
+    if not fast_approx:  # boolean, fast or usual Q-R-decomposition
+        Q, *_ = np.linalg.qr(X)
+    else:
+        Q = fast_QR(X, p=p)
+
+    leverage_scores = np.power(np.linalg.norm(Q, axis=1, ord=p), p)
+
+    return leverage_scores
 
 class LeverageScoreSamplingExperiment(BaseExperiment):
+    """
+    https://github.com/chr-peters/efficient-probit-regression/blob/cf5da81415f0b866a5971f38e92fa3d32e752c96/efficient_probit_regression/sampling.py#L243
+    """
+
+    def __init__(
+            self,
+            dataset: Dataset,
+            results_filename,
+            min_size,
+            max_size,
+            step_size,
+            num_runs,
+            optimizer: optimizer.base_optimizer,
+            p
+    ):
+        self.p = p
+        super().__init__(
+            num_runs=num_runs,
+            min_size=min_size,
+            max_size=max_size,
+            step_size=step_size,
+            dataset=dataset,
+            results_filename=results_filename,
+            optimizer=optimizer,
+        )
+
+
+
+    def get_reduced_matrix_and_weights(self, config):
+        Z = self.optimizer.get_Z()
+        size = config["size"]
+
+        leverage_scores = compute_leverage_scores(Z, p=self.p, fast_approx=True)
+
+        leverage_scores = leverage_scores / np.sum(leverage_scores)
+        # augmented
+        leverage_scores = leverage_scores + 0.2 / Z.shape[0]
+
+        # calculate probabilities
+        prob = leverage_scores / np.sum(leverage_scores)
+        weights = 1 / (prob * size)
+        weights[weights < 1] = 1
+        sample_indices = np.random.choice(Z.shape[0], size=size, replace=False, p=prob)
+
+        return Z[sample_indices, :], weights[sample_indices]
+
+
+
+class LeverageScoreL1AndL2Experiment(BaseExperiment):
     """
     https://github.com/chr-peters/efficient-probit-regression/blob/cf5da81415f0b866a5971f38e92fa3d32e752c96/efficient_probit_regression/sampling.py#L243
     """
@@ -478,73 +579,25 @@ class LeverageScoreSamplingExperiment(BaseExperiment):
             optimizer=optimizer,
         )
 
-    def fast_QR(self, X, p=1):
-        """
-        Returns Q of a fast QR decomposition of X.
-        """
-        n, d = X.shape
-
-        if p <= 2:
-            sketch_size = d ** 2
-        else:
-            sketch_size = np.maximum(d ** 2, int(np.power(n, 1 - 2 / p)))
-
-        f = np.random.randint(sketch_size, size=n)
-        g = np.random.randint(2, size=n) * 2 - 1
-        if p != 2:
-            lamb = expon.rvs(size=n)
-
-        # init the sketch
-        X_sketch = np.zeros((sketch_size, d))
-        if p == 2:
-            for i in range(n):
-                X_sketch[f[i]] += g[i] * X[i]
-        else:
-            for i in range(n):
-                X_sketch[f[i]] += g[i] / np.power(lamb[i], 1 / p) * X[i]  # exponential distributed random variable
-
-        R = np.linalg.qr(X_sketch, mode="r")
-        R_inv = np.linalg.inv(R)
-
-        if p == 2:
-            k = 20
-            g = np.random.normal(loc=0, scale=1 / np.sqrt(k), size=(R_inv.shape[1], k))
-            r = np.dot(R_inv, g)
-            Q = np.dot(X, r)
-        else:
-            Q = np.dot(X, R_inv)
-        return Q
-
-    def compute_leverage_scores(self, X: np.ndarray, p, fast_approx):
-        """
-            Computes leverage scores.
-        """
-        if not len(X.shape) == 2:
-            raise ValueError("X must be 2D!")
-
-        if not fast_approx:  # boolean, fast or usual Q-R-decomposition
-            Q, *_ = np.linalg.qr(X)
-        else:
-            Q = self.fast_QR(X, p=p)
-
-        leverage_scores = np.power(np.linalg.norm(Q, axis=1, ord=p), p)
-
-        return leverage_scores
-
     def get_reduced_matrix_and_weights(self, config):
         Z = self.optimizer.get_Z()
         size = config["size"]
 
-        leverage_scores = self.compute_leverage_scores(Z, p=1, fast_approx=True)
+        new_config1 = config.copy()
+        new_config1["size"] = size // 2
+        new_config2 = new_config1.copy()
+        new_config2["size"] = size - new_config1["size"]
 
-        leverage_scores = leverage_scores / np.sum(leverage_scores)
-        # augmented
-        leverage_scores = leverage_scores + 0.2 / Z.shape[0]
+        experiment_turnstile1 = TurnstileSamplingExperiment(
+            dataset=self.dataset, results_filename=None, min_size=None, max_size=None,
+            step_size=None, num_runs=None, optimizer=self.optimizer, factor_unif=0.2, p=1
+        )
+        reduced_matrix1, weights1 = experiment_turnstile1.get_reduced_matrix_and_weights(new_config1)
 
-        # calculate probabilities
-        prob = leverage_scores / np.sum(leverage_scores)
-        weights = 1 / (prob * size)
-        weights[weights < 1] = 1
-        sample_indices = np.random.choice(Z.shape[0], size=size, replace=False, p=prob)
+        experiment_turnstile2 = TurnstileSamplingExperiment(
+            dataset=self.dataset, results_filename=None, min_size=None, max_size=None,
+            step_size=None, num_runs=None, optimizer=self.optimizer, factor_unif=0.2, p=2
+        )
+        reduced_matrix2, weights2 = experiment_turnstile2.get_reduced_matrix_and_weights(new_config2)
 
-        return Z[sample_indices, :], weights[sample_indices]
+        return np.vstack((reduced_matrix1, reduced_matrix2)), np.hstack((weights1, weights2))

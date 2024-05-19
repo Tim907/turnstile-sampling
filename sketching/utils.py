@@ -3,11 +3,10 @@ from . import settings
 from . import optimizer
 from .datasets import Dataset
 from .experiments import (
-    CauchySketchingExperiment,
     ObliviousSketchingExperiment,
     TurnstileSamplingExperiment,
-    UniformSamplingExperiment,
-    LeverageScoreSamplingExperiment
+    LeverageScoreSamplingExperiment,
+    LeverageScoreL1AndL2Experiment
 )
 
 logger = logging.getLogger(settings.LOGGER_NAME)
@@ -49,27 +48,45 @@ def run_experiments(dataset: Dataset, min_size, max_size, step_size, num_runs, a
     logger.info("Starting turnstile experiment")
     experiment_sketching = TurnstileSamplingExperiment(
         dataset=dataset,
-        results_filename=settings.RESULTS_DIR / f"{dataset.get_name()}_turnstile.csv",
+        #results_filename=settings.RESULTS_DIR / f"{dataset.get_name()}_turnstile.csv",
+        results_filename=settings.RESULTS_DIR / "L1.5" / f"{dataset.get_name()}_turnstile.csv",
         min_size=min_size,
         max_size=max_size,
         step_size=step_size,
         num_runs=num_runs,
-        optimizer=optimizer.base_optimizer(),
-        factor_unif=0.2
+        #optimizer=optimizer.base_optimizer(),
+        optimizer=optimizer.L1_5_optimizer(),
+        factor_unif=0.2,
+        p=1.5
     )
-    experiment_sketching.run(parallel=True, n_jobs=3, add=add)
+    #experiment_sketching.run(parallel=False, n_jobs=3, add=add)
 
     logger.info("Starting leverage sampling experiment")
     experiment_leverage = LeverageScoreSamplingExperiment(
         dataset=dataset,
-        results_filename=settings.RESULTS_DIR / f"{dataset.get_name()}_leverage.csv",
+        #results_filename=settings.RESULTS_DIR / f"{dataset.get_name()}_leverage.csv",
+        results_filename=settings.RESULTS_DIR / "L1.5" / f"{dataset.get_name()}_leverage.csv",
         min_size=min_size,
         max_size=max_size,
         step_size=step_size,
         num_runs=num_runs,
-        optimizer=optimizer.base_optimizer(),
+        #optimizer=optimizer.base_optimizer(),
+        optimizer=optimizer.L1_5_optimizer(),
+        p=1.5
     )
-    experiment_leverage.run(parallel=True, n_jobs=3, add=add)
+    experiment_leverage.run(parallel=True, n_jobs=2, add=add)
+
+    logger.info("Starting leverage sampling experiment")
+    experiment_leverage = LeverageScoreL1AndL2Experiment(
+        dataset=dataset,
+        results_filename=settings.RESULTS_DIR / f"{dataset.get_name()}_leverageL1+L2.csv",
+        min_size=min_size,
+        max_size=max_size,
+        step_size=step_size,
+        num_runs=num_runs,
+        optimizer=optimizer.L1_5_optimizer(),
+    )
+    #experiment_leverage.run(parallel=False, n_jobs=3, add=add)
 
     logger.info("Starting sketching experiment")
     experiment_sketching = ObliviousSketchingExperiment(
@@ -85,5 +102,5 @@ def run_experiments(dataset: Dataset, min_size, max_size, step_size, num_runs, a
         cohensketch=2,
         optimizer=optimizer.base_optimizer()
     )
-    experiment_sketching.run(parallel=True, n_jobs=3, add=add)
+    #experiment_sketching.run(parallel=True, n_jobs=3, add=add)
 

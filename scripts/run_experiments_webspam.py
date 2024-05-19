@@ -15,9 +15,9 @@ logistic likelihood, variance-regularized logistic likelihood, L1-optimization a
 MIN_SIZE = 500
 MAX_SIZE = 15000
 STEP_SIZE = 500
-NUM_RUNS = 21
+NUM_RUNS = 3
 
-dataset = Webspam_libsvm(use_caching=False)
+dataset = Webspam_libsvm(use_caching=True)
 
 run_experiments(
     dataset=dataset,

@@ -102,6 +102,16 @@ def L1_grad(theta, X, y):
     return np.sum(np.multiply(X, np.sign(X.dot(theta) - y)[:, np.newaxis]), axis=0)
 
 
+def L1_5_objective(theta, X, y, w):
+    """L1 loss function"""
+
+    return np.sum(w * np.abs(X.dot(theta) - y)**1.5)
+
+def L1_5_grad(theta, X, y, w):
+    """L1 gradient function"""
+    return np.dot(w * np.abs(X.dot(theta) - y) ** 0.5 * np.sign(X.dot(theta) - y), X)
+
+
 def optimize(Z, w=None, block_size=None, k=None, max_len=None):
 
     if w is None:
@@ -115,7 +125,7 @@ def optimize(Z, w=None, block_size=None, k=None, max_len=None):
 
     theta0 = np.zeros(Z.shape[1])
 
-    res = so.minimize(objective_function, theta0, method="L-BFGS-B", jac=gradient, options={'gtol': 1e-09, 'ftol': 1e-20, 'maxls': 50, 'maxfun': 30000, 'maxiter': 30000})
+    res = so.minimize(objective_function, theta0, method="L-BFGS-B", jac=gradient, options={'gtol': 1e-09, 'ftol': 1e-16, 'maxls': 50, 'maxfun': 200000, 'maxiter': 200000})
     if res.success is False:
         print(f"Optimization not successful: {res.message}")
     return res
@@ -138,7 +148,40 @@ def optimize_L1(Z, w=None):
 
     theta0 = np.zeros(X.shape[1])
 
-    res = so.minimize(objective_function, theta0, method="L-BFGS-B", jac=gradient, options={'gtol': 1e-09, 'ftol': 1e-20, 'maxls': 50, 'maxfun': 30000, 'maxiter': 30000})
+    res = so.minimize(objective_function, theta0, method="L-BFGS-B", jac=gradient, options={'gtol': 1e-09, 'ftol': 1e-16, 'maxls': 50, 'maxfun': 200000, 'maxiter': 200000})
+    print(res)
+    if res.success is False:
+        print(f"Optimization not successful: {res.message}")
+    if res.nit <= 2:
+        print("Very few iterations in optimization!")
+    # res2 = so.minimize(objective_function, theta0, method="L-BFGS-B", jac=gradient, options={'gtol': 1e-09, 'ftol': 1e-20, 'maxls': 50, 'disp': 10})
+
+    # theta_opt = [res.x]
+    # s = 0.2 / np.linalg.norm(gradient(theta_opt[0]), ord=2)
+    # for i in range(1000):
+    #     print(objective_function(theta_opt[i]))
+    #     theta_opt.append(theta_opt[i] - s * gradient(theta_opt[i]) / np.sqrt(i+1))
+
+    return res
+
+def optimize_L1_5(Z, w=None):
+    """Optimizes by L1 loss according to Theorem 1 of the paper."""
+
+    if w is None:
+        w = np.ones(Z.shape[0])
+
+    X = Z[:, 0:(Z.shape[1] - 1)]
+    y = Z[:, -1]
+
+    def objective_function(theta):
+        return L1_5_objective(theta, X, y, w)
+
+    def gradient(theta):
+        return L1_5_grad(theta, X, y, w)
+
+    theta0 = np.zeros(X.shape[1])
+
+    res = so.minimize(objective_function, theta0, method="L-BFGS-B", jac=gradient, options={'gtol': 1e-09, 'ftol': 1e-16, 'maxls': 50, 'maxfun': 200000, 'maxiter': 200000})
     print(res)
     if res.success is False:
         print(f"Optimization not successful: {res.message}")
@@ -232,6 +275,22 @@ class L1_optimizer(base_optimizer):
         # last column gets label unlike in logistic optimizer
         return np.append(np.append(self.X, np.ones(shape=(self.X.shape[0], 1)), axis=1), self.y[:, np.newaxis], axis=1)
 
+class L1_5_optimizer(base_optimizer):
+    """optimizer for L1 optimization"""
+
+    def get_name(self):
+        return "L1.5"
+
+    def optimize(self, reduced_matrix, weights=None):
+        return optimize_L1_5(reduced_matrix, w=weights).x
+
+    def get_objective_function(self):
+        Z = self.get_Z()
+        return lambda theta: L1_5_objective(theta, X=Z[:, 0:(Z.shape[1]-1)], y=Z[:, -1], w=np.ones(Z.shape[0]))
+
+    def get_Z(self):
+        # last column gets label unlike in logistic optimizer
+        return np.append(np.append(self.X, np.ones(shape=(self.X.shape[0], 1)), axis=1), self.y[:, np.newaxis], axis=1)
 
 class L1_linear_program_optimizer(base_optimizer):
     """optimizer for L1 optimization"""
