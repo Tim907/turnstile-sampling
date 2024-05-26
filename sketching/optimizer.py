@@ -1,4 +1,5 @@
 import logging
+import warnings
 
 import numpy as np
 import scipy.optimize as so
@@ -104,12 +105,12 @@ def L1_grad(theta, X, y):
 
 def L1_5_objective(theta, X, y, w):
     """L1 loss function"""
-
     return np.sum(w * np.abs(X.dot(theta) - y)**1.5)
 
 def L1_5_grad(theta, X, y, w):
     """L1 gradient function"""
-    return np.dot(w * np.abs(X.dot(theta) - y) ** 0.5 * np.sign(X.dot(theta) - y), X)
+    xthetaminy = X.dot(theta) - y
+    return np.dot((w * np.abs(xthetaminy) ** 0.5) * np.sign(xthetaminy), X)
 
 
 def optimize(Z, w=None, block_size=None, k=None, max_len=None):
@@ -125,9 +126,14 @@ def optimize(Z, w=None, block_size=None, k=None, max_len=None):
 
     theta0 = np.zeros(Z.shape[1])
 
-    res = so.minimize(objective_function, theta0, method="L-BFGS-B", jac=gradient, options={'gtol': 1e-09, 'ftol': 1e-16, 'maxls': 50, 'maxfun': 200000, 'maxiter': 200000})
+    res = so.minimize(objective_function, theta0, method="L-BFGS-B", jac=gradient, options={'gtol': 1e-09, 'ftol': 1e-20, 'maxls': 50, 'maxfun': 200000, 'maxiter': 200000})
     if res.success is False:
-        print(f"Optimization not successful: {res.message}")
+        warnings.warn(f"Optimization not successful: {res.message}")
+    if res.nit <= 2:
+        warnings.warn("Very few iterations in optimization!")
+    nor = np.linalg.norm(gradient(res.x), ord=2)
+    if nor > 1:
+        warnings.warn(f"Norm of final gradient was {nor}!")
     return res
 
 
@@ -148,19 +154,15 @@ def optimize_L1(Z, w=None):
 
     theta0 = np.zeros(X.shape[1])
 
-    res = so.minimize(objective_function, theta0, method="L-BFGS-B", jac=gradient, options={'gtol': 1e-09, 'ftol': 1e-16, 'maxls': 50, 'maxfun': 200000, 'maxiter': 200000})
+    res = so.minimize(objective_function, theta0, method="L-BFGS-B", jac=gradient, options={'gtol': 1e-09, 'ftol': 0, 'maxls': 50, 'maxfun': 200000, 'maxiter': 200000})
     print(res)
     if res.success is False:
-        print(f"Optimization not successful: {res.message}")
+        warnings.warn(f"Optimization not successful: {res.message}")
     if res.nit <= 2:
-        print("Very few iterations in optimization!")
-    # res2 = so.minimize(objective_function, theta0, method="L-BFGS-B", jac=gradient, options={'gtol': 1e-09, 'ftol': 1e-20, 'maxls': 50, 'disp': 10})
-
-    # theta_opt = [res.x]
-    # s = 0.2 / np.linalg.norm(gradient(theta_opt[0]), ord=2)
-    # for i in range(1000):
-    #     print(objective_function(theta_opt[i]))
-    #     theta_opt.append(theta_opt[i] - s * gradient(theta_opt[i]) / np.sqrt(i+1))
+        warnings.warn("Very few iterations in optimization!")
+    nor = np.linalg.norm(gradient(res.x), ord=2)
+    if nor > 1:
+        warnings.warn(f"Norm of final gradient was {nor}!")
 
     return res
 
@@ -181,19 +183,15 @@ def optimize_L1_5(Z, w=None):
 
     theta0 = np.zeros(X.shape[1])
 
-    res = so.minimize(objective_function, theta0, method="L-BFGS-B", jac=gradient, options={'gtol': 1e-09, 'ftol': 1e-16, 'maxls': 50, 'maxfun': 200000, 'maxiter': 200000})
+    res = so.minimize(objective_function, theta0, method="L-BFGS-B", jac=gradient, options={'gtol': 1e-09, 'ftol': 1e-20, 'maxls': 50, 'maxfun': 200000, 'maxiter': 200000})
     print(res)
     if res.success is False:
-        print(f"Optimization not successful: {res.message}")
+        warnings.warn(f"Optimization not successful: {res.message}")
     if res.nit <= 2:
-        print("Very few iterations in optimization!")
-    # res2 = so.minimize(objective_function, theta0, method="L-BFGS-B", jac=gradient, options={'gtol': 1e-09, 'ftol': 1e-20, 'maxls': 50, 'disp': 10})
-
-    # theta_opt = [res.x]
-    # s = 0.2 / np.linalg.norm(gradient(theta_opt[0]), ord=2)
-    # for i in range(1000):
-    #     print(objective_function(theta_opt[i]))
-    #     theta_opt.append(theta_opt[i] - s * gradient(theta_opt[i]) / np.sqrt(i+1))
+        warnings.warn("Very few iterations in optimization!")
+    nor = np.linalg.norm(gradient(res.x), ord=2)
+    if nor > 1:
+        warnings.warn(f"Norm of final gradient was {nor}!")
 
     return res
 

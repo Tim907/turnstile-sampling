@@ -17,7 +17,7 @@ MAX_SIZE = 20000
 STEP_SIZE = 1000
 NUM_RUNS = 21
 
-dataset = Covertype_Sklearn(use_caching=False)
+dataset = Covertype_Sklearn(use_caching=True)
 
 run_experiments(
     dataset=dataset,

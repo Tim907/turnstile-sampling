@@ -554,7 +554,7 @@ class LeverageScoreSamplingExperiment(BaseExperiment):
 
 
 
-class LeverageScoreL1AndL2Experiment(BaseExperiment):
+class TurnstileL1AndL2Experiment(BaseExperiment):
     """
     https://github.com/chr-peters/efficient-probit-regression/blob/cf5da81415f0b866a5971f38e92fa3d32e752c96/efficient_probit_regression/sampling.py#L243
     """
