@@ -2,7 +2,7 @@
 
 [![python-version](https://img.shields.io/badge/python-3.8%20%7C%203.9-blue)](https://img.shields.io/badge/python-3.8%20%7C%203.9-blue)
 
-This is the accompanying code repository for the PLACEHOLDER publication "Turnstile Sampling" by Alexander Munteanu and Simon Omlor. 
+This is the accompanying code repository for the **ICML 2024** publication **"Turnstile ℓp leverage score sampling with applications"** by Alexander Munteanu and Simon Omlor, implementation and experiments supported by Tim Novak.
 
 ## How to install
 
