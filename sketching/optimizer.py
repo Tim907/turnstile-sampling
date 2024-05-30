@@ -155,7 +155,6 @@ def optimize_L1(Z, w=None):
     theta0 = np.zeros(X.shape[1])
 
     res = so.minimize(objective_function, theta0, method="L-BFGS-B", jac=gradient, options={'gtol': 1e-09, 'ftol': 0, 'maxls': 50, 'maxfun': 200000, 'maxiter': 200000})
-    print(res)
     if res.success is False:
         warnings.warn(f"Optimization not successful: {res.message}")
     if res.nit <= 2:
@@ -184,7 +183,6 @@ def optimize_L1_5(Z, w=None):
     theta0 = np.zeros(X.shape[1])
 
     res = so.minimize(objective_function, theta0, method="L-BFGS-B", jac=gradient, options={'gtol': 1e-09, 'ftol': 1e-20, 'maxls': 50, 'maxfun': 200000, 'maxiter': 200000})
-    print(res)
     if res.success is False:
         warnings.warn(f"Optimization not successful: {res.message}")
     if res.nit <= 2:
@@ -195,40 +193,6 @@ def optimize_L1_5(Z, w=None):
 
     return res
 
-
-def optimize_L1_LP(Z, w=None):
-    if w is not None:
-        Z = w[:, np.newaxis] * Z
-
-    # Z = Z[0:1000, :]
-    # test = optimize_L1(Z, w)
-
-    X = Z[:, 0:(Z.shape[1] - 1)]
-    y = Z[:, -1]
-
-    n, d = X.shape
-
-    # Coefficients for the decision variables (beta, epsilon)
-    c = np.concatenate((np.zeros(d), np.ones(n)))
-
-
-    # Inequality constraints: (beta^T * X) - epsilon <= y
-    A_ub = spa.hstack([spa.csr_matrix(X), spa.diags(-np.ones(n))])
-    b_ub = y
-
-    # Inequality constraints: -(beta^T * X) - epsilon <= -y
-    A_ub2 = spa.hstack([spa.csr_matrix(-X), spa.diags(-np.ones(n))])
-    b_ub2 = -y
-
-    # Bounds for beta, beta0, and epsilon
-    bounds = [(None, None)] * d + [(0, None)] * n
-
-    # Solve the linear program
-    result = so.linprog(c, A_ub=spa.vstack((A_ub, A_ub2)), b_ub=np.hstack((b_ub, b_ub2)), bounds=bounds, options={"sparse": True, "disp": True, "sym_pos": False})
-
-    # Extract the solution
-    beta = result.x[:d]
-    return beta
 
 
 
@@ -289,6 +253,40 @@ class L1_5_optimizer(base_optimizer):
     def get_Z(self):
         # last column gets label unlike in logistic optimizer
         return np.append(np.append(self.X, np.ones(shape=(self.X.shape[0], 1)), axis=1), self.y[:, np.newaxis], axis=1)
+
+
+def optimize_L1_LP(Z, w=None):
+    """Linear programming optimal solution L1 loss but very slow"""
+    if w is not None:
+        Z = w[:, np.newaxis] * Z
+
+    X = Z[:, 0:(Z.shape[1] - 1)]
+    y = Z[:, -1]
+
+    n, d = X.shape
+
+    # Coefficients for the decision variables (beta, epsilon)
+    c = np.concatenate((np.zeros(d), np.ones(n)))
+
+
+    # Inequality constraints: (beta^T * X) - epsilon <= y
+    A_ub = spa.hstack([spa.csr_matrix(X), spa.diags(-np.ones(n))])
+    b_ub = y
+
+    # Inequality constraints: -(beta^T * X) - epsilon <= -y
+    A_ub2 = spa.hstack([spa.csr_matrix(-X), spa.diags(-np.ones(n))])
+    b_ub2 = -y
+
+    # Bounds for beta, beta0, and epsilon
+    bounds = [(None, None)] * d + [(0, None)] * n
+
+    # Solve the linear program
+    result = so.linprog(c, A_ub=spa.vstack((A_ub, A_ub2)), b_ub=np.hstack((b_ub, b_ub2)), bounds=bounds, options={"sparse": True, "disp": True, "sym_pos": False})
+
+    # Extract the solution
+    beta = result.x[:d]
+    return beta
+
 
 class L1_linear_program_optimizer(base_optimizer):
     """optimizer for L1 optimization"""

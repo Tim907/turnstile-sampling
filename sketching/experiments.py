@@ -331,10 +331,6 @@ class TurnstileSamplingExperiment(BaseExperiment):
         size = round( k * max(30, np.log(n) ) )
         s = 2 * round( max(5, np.log(n)/2 ) ) + 1
         p = self.p
-
-        print("Unif: "+str(self.factor_unif))
-        print("Size (r): "+str(size))
-        print("Size (s): "+str(s))
         
         if s / 2 == s // 2:
             raise ValueError("S should be an odd number.")
@@ -355,17 +351,11 @@ class TurnstileSamplingExperiment(BaseExperiment):
             for j in range(s):
                 B_j_list[j][h_i_j_mat[i, j], :] += sigma_i_j_mat[i, j] * Z[i, :] / t_i[i] ** (1 / p)
 
-        # turnstile stream updates for Algo 3
+        # turnstile stream updates
         f = np.random.randint((d ** 2), size=n)
         g = (np.random.randint(2, size=n) * 2 - 1) # * d
-        #f2 = np.random.randint(d ** 2, size=n)
-        #g2 = np.random.standard_cauchy(n) / np.log(d)
         Z_ = np.zeros(((d**2), d))
-        
-        # QR decomposition for Algo3
-        #for i in range(n):
-        #    Z_[f[i]] += g[i] * Z[i, :] # Pi1*Z
-        #    Z_[(d ** 2) + f2[i]] += g2[i] * Z[i, :] # Pi2*Z
+
         if p == 2:
             for i in range(n):
                 Z_[f[i]] += g[i] * Z[i, :]
@@ -441,13 +431,6 @@ class TurnstileSamplingExperiment(BaseExperiment):
         norms_unif = 1/norms_unif
         weights = np.concatenate((weights, norms_unif))
 
-        # print("\nreduced_matrix distribution:\n")
-        # print(pd.Series(reduced_matrix[:,0]).describe())
-        # print("\nweights distribution:\n")
-        # print(pd.Series(weights).describe())
-        # print(weights)
-        # print(n)
-        # print(np.sum(weights))
         return reduced_matrix, weights
 
 
@@ -583,11 +566,13 @@ class TurnstileL1AndL2Experiment(BaseExperiment):
         Z = self.optimizer.get_Z()
         size = config["size"]
 
+        # Halve the size for both sketches
         new_config1 = config.copy()
         new_config1["size"] = size // 2
         new_config2 = new_config1.copy()
         new_config2["size"] = size - new_config1["size"]
 
+        # Turnstile sample with p=1 and p=2
         experiment_turnstile1 = TurnstileSamplingExperiment(
             dataset=self.dataset, results_filename=None, min_size=None, max_size=None,
             step_size=None, num_runs=None, optimizer=self.optimizer, factor_unif=0.2, p=1
@@ -600,4 +585,5 @@ class TurnstileL1AndL2Experiment(BaseExperiment):
         )
         reduced_matrix2, weights2 = experiment_turnstile2.get_reduced_matrix_and_weights(new_config2)
 
+        # Combine both solutions
         return np.vstack((reduced_matrix1, reduced_matrix2)), np.hstack((weights1, weights2))
